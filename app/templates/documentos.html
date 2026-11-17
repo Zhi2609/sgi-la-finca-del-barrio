@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% block title %}Control Documental · {{ company.name }}{% endblock %}
+{% block page_heading %}Información Documentada del SGI (ISO/IEC 27001 · Cláusula 7.5){% endblock %}
+{% block content %}
+
+<div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+  <div class="flex flex-wrap gap-2 text-xs">
+    <a href="/documentos" class="px-3 py-1.5 rounded-lg border {{ 'bg-vino-800 text-white border-vino-800' if not selected_cat else 'bg-white border-crema-200 text-stone-700 hover:bg-crema-100' }}">
+      Todos ({{ docs|length if not selected_cat else 'ver' }})
+    </a>
+    {% for cat in categories %}
+    <a href="/documentos?category={{ cat }}" class="px-3 py-1.5 rounded-lg border {{ 'bg-vino-800 text-white border-vino-800' if selected_cat == cat else 'bg-white border-crema-200 text-stone-700 hover:bg-crema-100' }}">
+      {{ cat }}
+    </a>
+    {% endfor %}
+  </div>
+
+  {% if user.can_write %}
+  <button type="button" command="show-modal" commandfor="new-doc-dialog"
+    class="px-4 py-2 rounded-lg bg-vino-800 hover:bg-vino-700 text-white text-xs font-semibold">
+    + Nuevo Documento Controlado
+  </button>
+  {% endif %}
+</div>
+
+<div class="bg-white rounded-xl border border-crema-200 shadow-sm overflow-hidden">
+  <div class="table-wrapper" tabindex="0" role="region" aria-labelledby="docs-table-cap">
+    <table class="sgi-table text-xs text-left">
+      <caption id="docs-table-cap" class="sr-only">Catálogo maestro de documentos del SGI</caption>
+      <thead class="bg-vino-900 text-crema-50">
+        <tr>
+          <th class="p-3">Clave / Folio</th>
+          <th class="p-3">Documento</th>
+          <th class="p-3">Normas</th>
+          <th class="p-3">Versión</th>
+          <th class="p-3">Control de Firmas</th>
+          <th class="p-3">Estado</th>
+          <th class="p-3 text-right">Acciones</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-crema-100">
+        {% for d in docs %}
+        <tr class="hover:bg-crema-50/70">
+          <th class="p-3 font-mono font-bold text-vino-800 text-left align-top">
+            <div>{{ d.code }}</div>
+            <div class="text-[11px] font-normal text-stone-500">{{ d.folio }}</div>
+          </th>
+          <td class="p-3 align-top">
+            <div class="font-bold text-stone-900">{{ d.title }}</div>
+            <div class="text-stone-500 mt-0.5">{{ d.summary }}</div>
+          </td>
+          <td class="p-3 align-top text-stone-600">{{ d.norms }}</td>
+          <td class="p-3 align-top font-semibold">{{ d.version }}<br><span class="font-normal text-stone-400">{{ d.approved_date }}</span></td>
+          <td class="p-3 align-top text-[11px] text-stone-600">
+            <div><strong>Elaboró:</strong> {{ d.elaborated_by }}</div>
+            <div><strong>Revisó:</strong> {{ d.reviewed_by }}</div>
+            <div><strong>Autorizó:</strong> {{ d.approved_by }}</div>
+          </td>
+          <td class="p-3 align-top">
+            <span class="px-2 py-0.5 rounded-full font-semibold {{ 'bg-emerald-100 text-emerald-800' if d.status == 'Aprobado' else 'bg-amber-100 text-amber-800' }}">
+              {{ d.status }}
+            </span>
+          </td>
+          <td class="p-3 align-top text-right space-y-1">
+            <a href="/documentos/{{ d.code }}/imprimir" target="_blank"
+               class="inline-block px-2.5 py-1 rounded bg-vino-800 text-white hover:bg-vino-700 font-semibold">
+              Ver / Imprimir PDF
+            </a>
+            {% if d.status != 'Aprobado' and user.can_write %}
+            <form action="/documentos/{{ d.code }}/aprobar" method="post">
+              <button type="submit" class="px-2.5 py-1 rounded bg-emerald-700 text-white hover:bg-emerald-600 font-semibold">
+                Aprobar
+              </button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Native modal dialog -->
+<dialog id="new-doc-dialog" aria-labelledby="new-doc-title" class="rounded-xl p-0 w-11/12 max-w-lg border border-crema-200 shadow-xl">
+  <div class="p-4 bg-vino-900 text-crema-50 flex items-center justify-between">
+    <h2 id="new-doc-title" class="font-bold text-sm text-oro-300">Registrar Nuevo Documento Controlado</h2>
+    <button type="button" command="close" commandfor="new-doc-dialog" onclick="document.getElementById('new-doc-dialog').close()" class="text-xs px-2 py-1 rounded bg-vino-800">Cerrar</button>
+  </div>
+  <form action="/documentos" method="post" class="p-5 space-y-3 text-xs bg-white">
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block font-semibold mb-1">Clave</label>
+        <input name="code" required placeholder="LFB-PR-XX-01" autofocus class="w-full rounded border border-crema-200 px-2.5 py-1.5" />
+      </div>
+      <div>
+        <label class="block font-semibold mb-1">Versión</label>
+        <input name="version" value="v1.0" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" />
+      </div>
+    </div>
+    <div>
+      <label class="block font-semibold mb-1">Título del documento</label>
+      <input name="title" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" />
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block font-semibold mb-1">Categoría</label>
+        <select name="category" class="w-full rounded border border-crema-200 px-2.5 py-1.5">
+          <option>Políticas</option>
+          <option>Procedimientos</option>
+          <option>Gobierno y Alcance</option>
+          <option>Riesgos y Continuidad</option>
+          <option>Auditoría y Mejora</option>
+        </select>
+      </div>
+      <div>
+        <label class="block font-semibold mb-1">Normas aplicables</label>
+        <input name="norms" value="ISO/IEC 27001:2022" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" />
+      </div>
+    </div>
+    <div>
+      <label class="block font-semibold mb-1">Resumen ejecutivo</label>
+      <input name="summary" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" />
+    </div>
+    <div>
+      <label class="block font-semibold mb-1">Contenido del documento</label>
+      <textarea name="body_text" rows="4" required class="w-full rounded border border-crema-200 px-2.5 py-1.5"></textarea>
+    </div>
+    <div class="flex justify-end gap-2 pt-2">
+      <button type="button" command="close" commandfor="new-doc-dialog" onclick="document.getElementById('new-doc-dialog').close()" class="px-3 py-1.5 rounded border border-crema-200">Cancelar</button>
+      <button type="submit" class="px-4 py-1.5 rounded bg-vino-800 text-white font-semibold">Guardar en SGI</button>
+    </div>
+  </form>
+</dialog>
+{% endblock %}

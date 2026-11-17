@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block title %}Incidentes ITIL 4 · {{ company.name }}{% endblock %}
+{% block page_heading %}Mesa de Ayuda y Gestión de Incidentes (FR-TI-01 · ITIL 4 / ISO 27035){% endblock %}
+{% block content %}
+
+<div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+  <div class="flex flex-wrap gap-2 text-xs">
+    <a href="/incidentes" class="px-3 py-1.5 rounded-lg border {{ 'bg-vino-800 text-white border-vino-800' if not selected_status else 'bg-white border-crema-200' }}">Todos</a>
+    <a href="/incidentes?status=Abierto" class="px-3 py-1.5 rounded-lg border {{ 'bg-vino-800 text-white border-vino-800' if selected_status == 'Abierto' else 'bg-white border-crema-200' }}">Abiertos</a>
+    <a href="/incidentes?status=En atención" class="px-3 py-1.5 rounded-lg border {{ 'bg-vino-800 text-white border-vino-800' if selected_status == 'En atención' else 'bg-white border-crema-200' }}">En atención</a>
+    <a href="/incidentes?status=Cerrado" class="px-3 py-1.5 rounded-lg border {{ 'bg-vino-800 text-white border-vino-800' if selected_status == 'Cerrado' else 'bg-white border-crema-200' }}">Cerrados</a>
+  </div>
+
+  {% if user.can_write %}
+  <button type="button" command="show-modal" commandfor="new-inc-dialog"
+    class="px-4 py-2 rounded-lg bg-vino-800 hover:bg-vino-700 text-white text-xs font-semibold">
+    + Levantar Ticket de Incidente
+  </button>
+  {% endif %}
+</div>
+
+<div class="space-y-4">
+  {% for inc in incidents %}
+  <article class="bg-white rounded-xl border border-crema-200 p-4 shadow-sm text-xs">
+    <div class="flex flex-wrap items-start justify-between gap-3">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="font-mono font-bold text-vino-800">{{ inc.folio }}</span>
+          <span class="px-2 py-0.5 rounded-full font-semibold {{ 'bg-red-100 text-red-800' if inc.severity == 'Crítica' else ('bg-amber-100 text-amber-800' if inc.severity == 'Alta' else 'bg-stone-100 text-stone-700') }}">
+            {{ inc.severity }} (SLA &lt; {{ inc.sla_hours }}h)
+          </span>
+          <span class="px-2 py-0.5 rounded-full font-semibold {{ 'bg-emerald-100 text-emerald-800' if inc.status == 'Cerrado' else 'bg-vino-100 text-vino-900' }}">
+            {{ inc.status }}
+          </span>
+        </div>
+        <h3 class="text-sm font-bold text-stone-900 mt-1">{{ inc.title }}</h3>
+        <p class="text-stone-600 mt-0.5">{{ inc.description }}</p>
+        <p class="text-[11px] text-stone-500 mt-1">
+          <strong>Sucursal:</strong> {{ inc.branch }} · <strong>Activo:</strong> {{ inc.asset_code }} · <strong>Asignado:</strong> {{ inc.assigned_to }} · <strong>Reportó:</strong> {{ inc.reported_by }}
+        </p>
+      </div>
+    </div>
+
+    {% if inc.resolution_notes or inc.lesson_learned %}
+    <div class="mt-3 p-2.5 rounded-lg bg-crema-50 border border-crema-200 grid grid-cols-1 md:grid-cols-2 gap-2">
+      <div><strong>Resolución técnica:</strong> {{ inc.resolution_notes or '—' }}</div>
+      <div><strong>Lección aprendida (ITIL 4):</strong> {{ inc.lesson_learned or '—' }}</div>
+    </div>
+    {% endif %}
+
+    {% if user.can_write %}
+    <form action="/incidentes/{{ inc.folio }}/estado" method="post" class="mt-3 pt-3 border-t border-crema-100 grid grid-cols-1 md:grid-cols-4 gap-2 items-end">
+      <div>
+        <label class="block font-semibold text-stone-600 mb-1">Estado</label>
+        <select name="status" class="w-full rounded border border-crema-200 px-2 py-1.5 bg-crema-50">
+          <option {{ 'selected' if inc.status == 'Abierto' else '' }}>Abierto</option>
+          <option {{ 'selected' if inc.status == 'En atención' else '' }}>En atención</option>
+          <option {{ 'selected' if inc.status == 'Resuelto' else '' }}>Resuelto</option>
+          <option {{ 'selected' if inc.status == 'Cerrado' else '' }}>Cerrado</option>
+        </select>
+      </div>
+      <div>
+        <label class="block font-semibold text-stone-600 mb-1">Solución aplicada</label>
+        <input name="resolution_notes" placeholder="Actualizar solución..." class="w-full rounded border border-crema-200 px-2 py-1.5" />
+      </div>
+      <div>
+        <label class="block font-semibold text-stone-600 mb-1">Lección aprendida (Mejora)</label>
+        <input name="lesson_learned" placeholder="Acción preventiva ITIL 4..." class="w-full rounded border border-crema-200 px-2 py-1.5" />
+      </div>
+      <button type="submit" class="px-3 py-1.5 rounded bg-vino-800 hover:bg-vino-700 text-white font-semibold">
+        Actualizar Ticket
+      </button>
+    </form>
+    {% endif %}
+  </article>
+  {% endfor %}
+</div>
+
+<dialog id="new-inc-dialog" aria-labelledby="new-inc-title" class="rounded-xl p-0 w-11/12 max-w-lg border border-crema-200 shadow-xl">
+  <div class="p-4 bg-vino-900 text-crema-50 flex items-center justify-between">
+    <h2 id="new-inc-title" class="font-bold text-sm text-oro-300">Nuevo Ticket de Incidente (FR-TI-01)</h2>
+    <button type="button" command="close" commandfor="new-inc-dialog" onclick="document.getElementById('new-inc-dialog').close()" class="text-xs px-2 py-1 rounded bg-vino-800">Cerrar</button>
+  </div>
+  <form action="/incidentes" method="post" class="p-5 space-y-3 text-xs bg-white">
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block font-semibold mb-1">Sucursal / Sede</label>
+        <select name="branch" class="w-full rounded border border-crema-200 px-2.5 py-1.5">
+          <option>Sucursal Camino Real</option>
+          <option>Sucursal Terraza San Fernando</option>
+          <option>La Finca del Toro</option>
+          <option>Evento Feria / Festival</option>
+        </select>
+      </div>
+      <div>
+        <label class="block font-semibold mb-1">Activo afectado</label>
+        <select name="asset_code" class="w-full rounded border border-crema-200 px-2.5 py-1.5">
+          {% for a in assets %}
+          <option value="{{ a.code }}">{{ a.code }} · {{ a.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div>
+      <label class="block font-semibold mb-1">Título del incidente</label>
+      <input name="title" required autofocus placeholder="Ej. Caída de POS en caja principal" class="w-full rounded border border-crema-200 px-2.5 py-1.5" />
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block font-semibold mb-1">Severidad (ITIL 4)</label>
+        <select name="severity" class="w-full rounded border border-crema-200 px-2.5 py-1.5">
+          <option value="Crítica">Crítica (SLA &lt; 2 h)</option>
+          <option value="Alta">Alta (SLA &lt; 2 h)</option>
+          <option value="Normal">Normal (SLA &lt; 24 h)</option>
+        </select>
+      </div>
+      <div>
+        <label class="block font-semibold mb-1">Asignar a</label>
+        <input name="assigned_to" required value="César García (TI)" class="w-full rounded border border-crema-200 px-2.5 py-1.5" />
+      </div>
+    </div>
+    <div>
+      <label class="block font-semibold mb-1">Descripción detallada</label>
+      <textarea name="description" rows="3" required class="w-full rounded border border-crema-200 px-2.5 py-1.5"></textarea>
+    </div>
+    <div class="flex justify-end gap-2 pt-2">
+      <button type="button" command="close" commandfor="new-inc-dialog" onclick="document.getElementById('new-inc-dialog').close()" class="px-3 py-1.5 rounded border border-crema-200">Cancelar</button>
+      <button type="submit" class="px-4 py-1.5 rounded bg-vino-800 text-white font-semibold">Registrar Ticket</button>
+    </div>
+  </form>
+</dialog>
+{% endblock %}

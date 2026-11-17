@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% block title %}Tablero SGI · {{ company.name }}{% endblock %}
+{% block page_heading %}Tablero Directivo del SGI y Gobierno de TI (ISO 38500 · Cl. 9){% endblock %}
+{% block content %}
+
+<!-- KPI Cards -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+  <div class="bg-white rounded-xl border border-crema-200 p-4 shadow-sm">
+    <p class="text-xs font-semibold text-stone-500 uppercase">Disponibilidad POS / SLA</p>
+    <p class="text-2xl font-bold text-vino-800 mt-1">{{ kpis.pos_availability }}</p>
+    <p class="text-xs text-stone-600 mt-1">Críticos abiertos: <strong>{{ kpis.crit_open }}</strong> · Meta ≥ 99%</p>
+  </div>
+
+  <div class="bg-white rounded-xl border border-crema-200 p-4 shadow-sm">
+    <p class="text-xs font-semibold text-stone-500 uppercase">Cadena de Frío (ISO 22000)</p>
+    <p class="text-2xl font-bold {{ 'text-emerald-700' if kpis.cold_pct >= 80 else 'text-amber-700' }} mt-1">{{ kpis.cold_pct }}%</p>
+    <p class="text-xs text-stone-600 mt-1">{{ kpis.cold_ok }} de {{ kpis.cold_total }} lecturas en rango (Ctrl 8.16)</p>
+  </div>
+
+  <div class="bg-white rounded-xl border border-crema-200 p-4 shadow-sm">
+    <p class="text-xs font-semibold text-stone-500 uppercase">Controles DdA 27001</p>
+    <p class="text-2xl font-bold text-vino-800 mt-1">{{ kpis.dda_pct }}%</p>
+    <p class="text-xs text-stone-600 mt-1">{{ kpis.dda_impl }}/{{ kpis.dda_applicable }} aplicables implementados</p>
+  </div>
+
+  <div class="bg-white rounded-xl border border-crema-200 p-4 shadow-sm">
+    <p class="text-xs font-semibold text-stone-500 uppercase">Respaldos y Capacitación</p>
+    <p class="text-2xl font-bold text-emerald-700 mt-1">{{ kpis.bkp_pct }}% / {{ kpis.train_pct }}%</p>
+    <p class="text-xs text-stone-600 mt-1">Restauración exitosa · Personal capacitado</p>
+  </div>
+</section>
+
+<!-- Integration banner -->
+<section class="bg-vino-900 text-crema-50 rounded-xl p-5 mb-6 border border-oro-500/40">
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <div>
+      <p class="text-xs uppercase tracking-wider text-oro-300 font-semibold">Arquitectura Integrada · Anexo SL</p>
+      <h2 class="text-lg font-bold mt-0.5">ISO/IEC 27001:2022 + ISO 22000:2018 + ISO/IEC 38500:2024</h2>
+      <p class="text-xs text-crema-200 mt-1">Respaldado con prácticas ITIL 4 (Incidentes, Cambios, Activos, Mejora Continua) y COBIT 2019 (APO12, DSS02, DSS04, BAI09).</p>
+    </div>
+    <div class="flex flex-wrap gap-2 text-xs">
+      <a href="/documentos/LFB-POL-01/imprimir" target="_blank" class="px-3 py-2 rounded-lg bg-oro-500 text-vino-950 font-bold hover:bg-oro-300">Ver Política Oficial</a>
+      <a href="/auditoria/revision-direccion/imprimir" target="_blank" class="px-3 py-2 rounded-lg bg-vino-800 border border-oro-500/40 text-oro-100 font-semibold hover:bg-vino-700">Acta Revisión Dirección</a>
+    </div>
+  </div>
+</section>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+  <!-- 5x5 Risk Heatmap -->
+  <section class="bg-white rounded-xl border border-crema-200 p-5 shadow-sm">
+    <div class="flex items-center justify-between mb-3">
+      <div>
+        <h2 class="text-base font-bold text-vino-900">Mapa de Calor de Riesgos (LFB-MCGR-01)</h2>
+        <p class="text-xs text-stone-500">{{ kpis.total_risks }} riesgos · {{ kpis.high_risks }} altos · {{ kpis.treated_risks }} tratamientos implementados</p>
+      </div>
+      <a href="/riesgos" class="text-xs font-semibold text-vino-700 hover:underline">Gestionar →</a>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-xs border-collapse text-center">
+        <thead>
+          <tr class="text-stone-600">
+            <th class="p-1.5 text-left">Impacto \ Prob.</th>
+            <th class="p-1.5">1 Raro</th>
+            <th class="p-1.5">2 Impr.</th>
+            <th class="p-1.5">3 Posible</th>
+            <th class="p-1.5">4 Prob.</th>
+            <th class="p-1.5">5 Casi seg.</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for imp in [5, 4, 3, 2, 1] %}
+          <tr>
+            <th class="p-1.5 text-left font-semibold text-stone-700 bg-crema-50 border border-crema-200">{{ imp }}</th>
+            {% for prob in [1, 2, 3, 4, 5] %}
+              {% set score = imp * prob %}
+              {% set cell_risks = heatmap.get((imp, prob), []) %}
+              {% set bg = 'bg-red-100 border-red-300 text-red-900' if score >= 15 else ('bg-amber-100 border-amber-300 text-amber-900' if score >= 6 else 'bg-emerald-50 border-emerald-200 text-emerald-900') %}
+              <td class="p-1.5 border {{ bg }} align-middle min-w-[54px]">
+                {% if cell_risks %}
+                  {% for cr in cell_risks %}
+                  <span class="inline-block px-1.5 py-0.5 rounded font-bold bg-white/80 border border-current text-[11px]" title="{{ cr.title }}">
+                    #{{ cr.risk_num }} ({{ cr.level }})
+                  </span>
+                  {% endfor %}
+                {% else %}
+                  <span class="text-stone-400">—</span>
+                {% endif %}
+              </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Recent Incidents & Cold Chain -->
+  <section class="bg-white rounded-xl border border-crema-200 p-5 shadow-sm flex flex-col gap-4">
+    <div>
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-base font-bold text-vino-900">Últimos Incidentes TI (FR-TI-01)</h2>
+        <a href="/incidentes" class="text-xs font-semibold text-vino-700 hover:underline">Abrir Mesa →</a>
+      </div>
+      <ul class="divide-y divide-crema-100 text-xs">
+        {% for inc in recent_incidents %}
+        <li class="py-2 flex items-center justify-between gap-2">
+          <div>
+            <span class="font-bold text-vino-800">{{ inc.folio }}</span> · {{ inc.title }}
+            <p class="text-stone-500">{{ inc.branch }} · {{ inc.asset_code }}</p>
+          </div>
+          <span class="px-2 py-0.5 rounded-full font-semibold shrink-0 {{ 'bg-red-100 text-red-800' if inc.severity == 'Crítica' else 'bg-amber-100 text-amber-800' }}">
+            {{ inc.status }}
+          </span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="pt-3 border-t border-crema-200">
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-base font-bold text-vino-900">Monitoreo Cadena de Frío (FR-CA-02)</h2>
+        <a href="/cadena-frio" class="text-xs font-semibold text-vino-700 hover:underline">Registrar →</a>
+      </div>
+      <ul class="divide-y divide-crema-100 text-xs">
+        {% for c in recent_cold %}
+        <li class="py-1.5 flex items-center justify-between gap-2">
+          <span><strong>{{ c.unit_name }}</strong> ({{ c.branch }})</span>
+          <span class="px-2 py-0.5 rounded-full font-bold {{ 'bg-emerald-100 text-emerald-800' if c.in_range else 'bg-red-100 text-red-800' }}">
+            {{ c.temp_c }} °C · {{ 'OK' if c.in_range else 'FUERA DE RANGO' }}
+          </span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+</div>
+
+<!-- Audit Trail -->
+<section class="bg-white rounded-xl border border-crema-200 p-5 shadow-sm">
+  <div class="flex items-center justify-between mb-3">
+    <h2 class="text-base font-bold text-vino-900">Bitácora de Trazabilidad del Sistema (Control 8.15 / 8.16)</h2>
+    <a href="/auditoria" class="text-xs font-semibold text-vino-700 hover:underline">Ver Auditoría Interna →</a>
+  </div>
+  <div class="table-wrapper" tabindex="0" role="region" aria-labelledby="trail-cap">
+    <table class="sgi-table text-xs text-left">
+      <caption id="trail-cap" class="sr-only">Registro de actividad en el sistema</caption>
+      <thead class="bg-crema-100 text-stone-700">
+        <tr>
+          <th class="p-2">Usuario</th>
+          <th class="p-2">Rol</th>
+          <th class="p-2">Acción</th>
+          <th class="p-2">Entidad</th>
+          <th class="p-2">Detalle</th>
+          <th class="p-2">Fecha/Hora</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-crema-100">
+        {% for t in recent_audit %}
+        <tr>
+          <td class="p-2 font-medium">{{ t.actor_email }}</td>
+          <td class="p-2 text-stone-600">{{ t.actor_role }}</td>
+          <td class="p-2"><span class="px-1.5 py-0.5 rounded bg-vino-50 text-vino-800 font-semibold">{{ t.action }}</span></td>
+          <td class="p-2 font-mono">{{ t.entity }}</td>
+          <td class="p-2">{{ t.detail }}</td>
+          <td class="p-2 text-stone-500">{{ t.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

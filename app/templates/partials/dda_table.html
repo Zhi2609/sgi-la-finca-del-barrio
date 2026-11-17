@@ -1,0 +1,48 @@
+<div class="bg-white rounded-xl border border-crema-200 shadow-sm overflow-hidden">
+  <div class="table-wrapper" tabindex="0" role="region" aria-labelledby="dda-cap">
+    <table class="sgi-table text-xs text-left">
+      <caption id="dda-cap" class="sr-only">Declaración de Aplicabilidad de los 93 controles ISO/IEC 27001:2022</caption>
+      <thead class="bg-vino-900 text-crema-50">
+        <tr>
+          <th class="p-3">Control</th>
+          <th class="p-3">Nombre</th>
+          <th class="p-3">Dominio</th>
+          <th class="p-3">Decisión</th>
+          <th class="p-3">Justificación / Efecto en SGI</th>
+          <th class="p-3">Riesgos</th>
+          <th class="p-3">Estado de Implementación</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-crema-100">
+        {% for c in controls %}
+        <tr class="hover:bg-crema-50/60">
+          <th class="p-3 font-mono font-bold text-vino-800 text-left align-top">{{ c.code }}</th>
+          <td class="p-3 font-semibold text-stone-900 align-top">{{ c.name }}</td>
+          <td class="p-3 align-top text-stone-600">{{ c.domain }}</td>
+          <td class="p-3 align-top">
+            <span class="px-2 py-0.5 rounded-full font-semibold whitespace-nowrap {{ 'bg-emerald-100 text-emerald-800' if c.decision == 'Aplica' else ('bg-amber-100 text-amber-800' if c.decision == 'Aplica parcialmente' else 'bg-stone-200 text-stone-700') }}">
+              {{ c.decision }}
+            </span>
+          </td>
+          <td class="p-3 align-top text-stone-600">{{ c.justification }}</td>
+          <td class="p-3 align-top font-mono text-[11px]">{{ c.related_risks or '—' }}</td>
+          <td class="p-3 align-top">
+            {% if user.can_write and c.decision != 'No aplica' %}
+            <form action="/dda/{{ c.code }}/estado" method="post" class="flex gap-1 items-center">
+              <select name="implementation_status" class="rounded border border-crema-200 px-1.5 py-1 text-[11px] bg-crema-50">
+                <option {{ 'selected' if c.implementation_status == 'Implementado' else '' }}>Implementado</option>
+                <option {{ 'selected' if c.implementation_status == 'En progreso' else '' }}>En progreso</option>
+                <option {{ 'selected' if c.implementation_status == 'Pendiente' else '' }}>Pendiente</option>
+              </select>
+              <button type="submit" class="px-2 py-1 rounded bg-vino-800 text-white text-[11px]">OK</button>
+            </form>
+            {% else %}
+            <span class="text-[11px] font-semibold text-stone-600">{{ c.implementation_status }}</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>

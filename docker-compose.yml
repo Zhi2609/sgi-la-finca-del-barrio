@@ -1,0 +1,32 @@
+services:
+  db:
+    image: docker.io/library/postgres:16-alpine
+    container_name: lfb-sgi-db
+    environment:
+      POSTGRES_DB: sgi_finca
+      POSTGRES_USER: sgi_user
+      POSTGRES_PASSWORD: sgi_finca_2026_password
+    volumes:
+      - lfb_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sgi_user -d sgi_finca"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  app:
+    build: .
+    container_name: lfb-sgi-app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://sgi_user:sgi_finca_2026_password@db:5432/sgi_finca
+      SESSION_SECRET: lfb-sgi-colima-2026-secret-key
+    ports:
+      - "8080:8000"
+    restart: unless-stopped
+
+volumes:
+  lfb_postgres_data:

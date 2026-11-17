@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}Auditoría y Mejora · {{ company.name }}{% endblock %}
+{% block page_heading %}Auditoría Interna Integrada y No Conformidades (Cláusulas 9 y 10){% endblock %}
+{% block content %}
+
+<div class="flex flex-wrap justify-between items-center gap-3 mb-5">
+  <p class="text-xs text-stone-600">Un solo programa de auditoría cubre ISO/IEC 27001, ISO 22000 e ISO/IEC 38500.</p>
+  <div class="flex gap-2 text-xs">
+    <a href="/auditoria/revision-direccion/imprimir" target="_blank" class="px-3.5 py-2 rounded-lg bg-oro-500 text-vino-950 font-bold hover:bg-oro-300">
+      Acta Revisión por Dirección (PDF)
+    </a>
+    {% if user.can_write %}
+    <button type="button" command="show-modal" commandfor="new-finding-dialog"
+      class="px-4 py-2 rounded-lg bg-vino-800 hover:bg-vino-700 text-white font-semibold">
+      + Registrar Hallazgo / No Conformidad
+    </button>
+    {% endif %}
+  </div>
+</div>
+
+<section class="bg-white rounded-xl border border-crema-200 shadow-sm overflow-hidden mb-6">
+  <div class="table-wrapper" tabindex="0" role="region" aria-labelledby="aud-cap">
+    <table class="sgi-table text-xs text-left">
+      <caption id="aud-cap" class="sr-only">Hallazgos de auditoría interna y acciones correctivas</caption>
+      <thead class="bg-vino-900 text-crema-50">
+        <tr>
+          <th class="p-3">Código</th>
+          <th class="p-3">Norma / Cláusula</th>
+          <th class="p-3">Tipo</th>
+          <th class="p-3">Descripción del Hallazgo</th>
+          <th class="p-3">Causa Raíz y Acción Correctiva</th>
+          <th class="p-3">Estado</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-crema-100">
+        {% for f in findings %}
+        <tr class="hover:bg-crema-50/60">
+          <th class="p-3 font-mono font-bold text-vino-800 text-left align-top">{{ f.code }}<br><span class="text-[11px] font-normal text-stone-400">{{ f.audit_date }}</span></th>
+          <td class="p-3 align-top"><div class="font-semibold">{{ f.norm_clause }}</div><div class="text-stone-500">{{ f.area_process }}</div></td>
+          <td class="p-3 align-top">
+            <span class="px-2 py-0.5 rounded-full font-semibold whitespace-nowrap {{ 'bg-emerald-100 text-emerald-800' if f.finding_type == 'Conforme' else ('bg-amber-100 text-amber-800' if 'Oportunidad' in f.finding_type else 'bg-red-100 text-red-800') }}">
+              {{ f.finding_type }}
+            </span>
+          </td>
+          <td class="p-3 align-top text-stone-700">{{ f.description }}</td>
+          <td class="p-3 align-top text-stone-600">
+            {% if f.root_cause %}<div><strong>Causa:</strong> {{ f.root_cause }}</div>{% endif %}
+            {% if f.corrective_action %}<div><strong>Acción:</strong> {{ f.corrective_action }}</div>{% endif %}
+            <div class="text-[11px] text-stone-400 mt-0.5">Resp: {{ f.responsible }} · Límite: {{ f.due_date }}</div>
+          </td>
+          <td class="p-3 align-top">
+            <span class="px-2 py-0.5 rounded-full font-semibold {{ 'bg-emerald-100 text-emerald-800' if f.status == 'Cerrada' else 'bg-red-100 text-red-800' }}">
+              {{ f.status }}
+            </span>
+            {% if f.status != 'Cerrada' and user.can_write %}
+            <form action="/auditoria/hallazgos/{{ f.code }}/cerrar" method="post" class="mt-1.5">
+              <button type="submit" class="px-2 py-1 rounded bg-vino-800 text-white text-[11px] font-semibold">Verificar y Cerrar</button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="bg-white rounded-xl border border-crema-200 p-5 shadow-sm">
+  <h2 class="text-base font-bold text-vino-900 mb-3">Log Completo de Auditoría del Sistema (Últimos 40 eventos)</h2>
+  <div class="table-wrapper" tabindex="0" role="region" aria-label="Bitácora de eventos del sistema">
+    <table class="sgi-table text-xs text-left">
+      <thead class="bg-crema-100 text-stone-700">
+        <tr><th class="p-2">Fecha/Hora</th><th class="p-2">Actor</th><th class="p-2">Rol</th><th class="p-2">Acción</th><th class="p-2">Entidad</th><th class="p-2">Detalle</th></tr>
+      </thead>
+      <tbody class="divide-y divide-crema-100">
+        {% for t in trail %}
+        <tr>
+          <td class="p-2 font-mono text-stone-500">{{ t.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+          <td class="p-2">{{ t.actor_email }}</td>
+          <td class="p-2 text-stone-600">{{ t.actor_role }}</td>
+          <td class="p-2 font-semibold text-vino-800">{{ t.action }}</td>
+          <td class="p-2 font-mono">{{ t.entity }}</td>
+          <td class="p-2">{{ t.detail }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<dialog id="new-finding-dialog" aria-labelledby="new-finding-title" class="rounded-xl p-0 w-11/12 max-w-lg border border-crema-200 shadow-xl">
+  <div class="p-4 bg-vino-900 text-crema-50 flex items-center justify-between">
+    <h2 id="new-finding-title" class="font-bold text-sm text-oro-300">Registrar Hallazgo de Auditoría</h2>
+    <button type="button" command="close" commandfor="new-finding-dialog" onclick="document.getElementById('new-finding-dialog').close()" class="text-xs px-2 py-1 rounded bg-vino-800">Cerrar</button>
+  </div>
+  <form action="/auditoria/hallazgos" method="post" class="p-5 space-y-3 text-xs bg-white">
+    <div class="grid grid-cols-2 gap-3">
+      <div><label class="block font-semibold mb-1">Norma / Cláusula</label><input name="norm_clause" required autofocus placeholder="ISO 27001 Cl. 8.13" class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      <div><label class="block font-semibold mb-1">Área / Proceso</label><input name="area_process" required placeholder="Gestión de TI" class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+    </div>
+    <div><label class="block font-semibold mb-1">Tipo de hallazgo</label>
+      <select name="finding_type" class="w-full rounded border border-crema-200 px-2.5 py-1.5">
+        <option>Conforme</option><option>Oportunidad de mejora</option><option>No conformidad menor</option><option>No conformidad mayor</option>
+      </select>
+    </div>
+    <div><label class="block font-semibold mb-1">Descripción</label><textarea name="description" rows="2" required class="w-full rounded border border-crema-200 px-2.5 py-1.5"></textarea></div>
+    <div><label class="block font-semibold mb-1">Causa raíz</label><input name="root_cause" class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+    <div><label class="block font-semibold mb-1">Acción correctiva</label><input name="corrective_action" class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+    <div class="grid grid-cols-2 gap-3">
+      <div><label class="block font-semibold mb-1">Responsable</label><input name="responsible" required value="César García (CISO)" class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      <div><label class="block font-semibold mb-1">Fecha límite</label><input name="due_date" type="date" value="2026-12-01" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+    </div>
+    <div class="flex justify-end gap-2 pt-2">
+      <button type="button" command="close" commandfor="new-finding-dialog" onclick="document.getElementById('new-finding-dialog').close()" class="px-3 py-1.5 rounded border border-crema-200">Cancelar</button>
+      <button type="submit" class="px-4 py-1.5 rounded bg-vino-800 text-white font-semibold">Guardar Hallazgo</button>
+    </div>
+  </form>
+</dialog>
+{% endblock %}

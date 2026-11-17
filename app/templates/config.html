@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Configuración Empresa · {{ company.name }}{% endblock %}
+{% block page_heading %}Datos Institucionales de la Empresa (Portadas y Encabezados){% endblock %}
+{% block content %}
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs">
+  <section class="bg-white rounded-xl border border-crema-200 p-5 shadow-sm">
+    <h2 class="text-base font-bold text-vino-900 mb-3">Información Oficial de La Finca del Barrio</h2>
+    <p class="text-stone-500 mb-4">Estos datos alimentan automáticamente los encabezados de documentos oficiales, actas y portadas del sistema.</p>
+    <form action="/configuracion" method="post" class="space-y-3">
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="block font-semibold mb-1">Nombre comercial</label><input name="name" value="{{ company.name }}" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+        <div><label class="block font-semibold mb-1">Eslogan</label><input name="slogan" value="{{ company.slogan }}" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      </div>
+      <div><label class="block font-semibold mb-1">Domicilio</label><input name="address" value="{{ company.address }}" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="block font-semibold mb-1">Teléfono</label><input name="phone" value="{{ company.phone }}" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+        <div><label class="block font-semibold mb-1">Correo electrónico</label><input name="email" value="{{ company.email }}" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      </div>
+      <div><label class="block font-semibold mb-1">Sitio web</label><input name="website" value="{{ company.website }}" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      <div><label class="block font-semibold mb-1">Sucursales y alcance</label><input name="branches" value="{{ company.branches }}" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="block font-semibold mb-1">Empleados base</label><input name="employees_count" type="number" value="{{ company.employees_count }}" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+        <div><label class="block font-semibold mb-1">Dueño / Dirección</label><input name="owner_name" value="{{ company.owner_name }}" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      </div>
+      {% if user.can_write %}
+      <button type="submit" class="px-4 py-2 rounded-lg bg-vino-800 hover:bg-vino-700 text-white font-semibold">
+        Actualizar Datos Institucionales
+      </button>
+      {% endif %}
+    </form>
+  </section>
+
+  <section class="bg-white rounded-xl border border-crema-200 p-5 shadow-sm">
+    <h2 class="text-base font-bold text-vino-900 mb-3">Equipo Consultor / Ingenieros (Portada Reportes)</h2>
+    <p class="text-stone-500 mb-3">Universidad de Colima · Facultad de Telemática · Ingeniería en Software · Gestión de las Tecnologías de Información.</p>
+    <ul class="divide-y divide-crema-100">
+      {% for eng in team_engineers %}
+      <li class="py-2.5">
+        <p class="font-bold text-stone-900">{{ eng.name }}</p>
+        <p class="text-stone-600">{{ eng.role }} · <span class="font-mono">{{ eng.email }}</span></p>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+</div>
+{% endblock %}

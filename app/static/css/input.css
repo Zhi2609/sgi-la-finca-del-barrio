@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-crema-50 text-stone-900 antialiased;
+  }
+
+  /* Modern Web Guidance: prevent scroll chaining behind modal dialogs */
+  dialog:modal {
+    overscroll-behavior: contain;
+  }
+  dialog::backdrop {
+    background: rgb(31 7 12 / 0.55);
+    backdrop-filter: blur(2px);
+    overflow: hidden;
+    overscroll-behavior: contain;
+  }
+}
+
+/* Responsive table wrapper (Modern Web Guidance) */
+.table-wrapper {
+  overflow: auto;
+  max-inline-size: 100%;
+  container-type: inline-size;
+}
+
+.sgi-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.sgi-table thead th {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 1;
+}
+
+/* HTMX loading indicator */
+.htmx-indicator {
+  display: none;
+}
+.htmx-request .htmx-indicator,
+.htmx-request.htmx-indicator {
+  display: inline-flex;
+}
+
+/* Official print formatting for controlled SGI PDFs */
+@media print {
+  @page {
+    size: letter;
+    margin: 14mm;
+  }
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .print-break-inside-avoid {
+    break-inside: avoid;
+  }
+  .shadow, .shadow-sm, .shadow-md, .shadow-lg {
+    box-shadow: none !important;
+  }
+}

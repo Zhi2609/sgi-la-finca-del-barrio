@@ -1,0 +1,1076 @@
+{
+  "dda": [
+    {
+      "code": "5.1",
+      "name": "Políticas de seguridad de la información",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Cl. 5.2 exige política aprobada por la dirección.",
+      "related_risks": "Todos"
+    },
+    {
+      "code": "5.2",
+      "name": "Roles y responsabilidades de seguridad",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Se asignan Owner, CISO y Responsable de TI (RACI).",
+      "related_risks": "#8"
+    },
+    {
+      "code": "5.3",
+      "name": "Segregación de funciones",
+      "domain": "Organizacional",
+      "decision": "Aplica parcialmente",
+      "justification": "Equipo pequeño: se separan al menos caja vs. administración del POS.",
+      "related_risks": "#2"
+    },
+    {
+      "code": "5.4",
+      "name": "Responsabilidades de la dirección",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Dueño aprueba política y revisa riesgos.",
+      "related_risks": "Todos"
+    },
+    {
+      "code": "5.5",
+      "name": "Contacto con autoridades",
+      "domain": "Organizacional",
+      "decision": "Aplica parcialmente",
+      "justification": "Solo SAT/PROFECO y protección civil ante incidentes; sin protocolo formal aún.",
+      "related_risks": "#11"
+    },
+    {
+      "code": "5.6",
+      "name": "Contacto con grupos de interés especiales",
+      "domain": "Organizacional",
+      "decision": "No aplica",
+      "justification": "Negocio local sin necesidad de foros especializados; el proveedor de POS ya cubre alertas. Efecto bajo.",
+      "related_risks": ""
+    },
+    {
+      "code": "5.7",
+      "name": "Inteligencia de amenazas",
+      "domain": "Organizacional",
+      "decision": "No aplica",
+      "justification": "Escala de 2 sucursales; no se justifica un servicio de inteligencia. Se atenderá vía proveedor de antivirus/nube.",
+      "related_risks": ""
+    },
+    {
+      "code": "5.8",
+      "name": "Seguridad de la información en gestión de proyectos",
+      "domain": "Organizacional",
+      "decision": "Aplica parcialmente",
+      "justification": "Aplica a proyectos de TI (terminal de respaldo, sensores).",
+      "related_risks": "#1,#6"
+    },
+    {
+      "code": "5.9",
+      "name": "Inventario de información y activos",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Inventario ACT-01 a ACT-20 ya elaborado (2.2).",
+      "related_risks": "Todos"
+    },
+    {
+      "code": "5.10",
+      "name": "Uso aceptable de información y activos",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Política de TI y acuerdo firmado.",
+      "related_risks": "#10"
+    },
+    {
+      "code": "5.11",
+      "name": "Devolución de activos",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Rotación de personal; celulares/tablets y POS.",
+      "related_risks": "#9"
+    },
+    {
+      "code": "5.12",
+      "name": "Clasificación de la información",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Público / Interno / Restringido ya definido en 2.2.",
+      "related_risks": "#2"
+    },
+    {
+      "code": "5.13",
+      "name": "Etiquetado de la información",
+      "domain": "Organizacional",
+      "decision": "Aplica parcialmente",
+      "justification": "Se etiqueta información restringida (contratos, contabilidad); no todo el material.",
+      "related_risks": "#2"
+    },
+    {
+      "code": "5.14",
+      "name": "Transferencia de información",
+      "domain": "Organizacional",
+      "decision": "Aplica parcialmente",
+      "justification": "Aplica a envío de CFDI y datos a proveedores y delivery.",
+      "related_risks": "#2"
+    },
+    {
+      "code": "5.15",
+      "name": "Control de acceso",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Credenciales POS por rol; red administrativa separada.",
+      "related_risks": "#4"
+    },
+    {
+      "code": "5.16",
+      "name": "Gestión de identidad",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Usuarios individuales en POS e inventario.",
+      "related_risks": "#4"
+    },
+    {
+      "code": "5.17",
+      "name": "Información de autenticación",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Contraseñas sin rotación es una debilidad detectada.",
+      "related_risks": "#4"
+    },
+    {
+      "code": "5.18",
+      "name": "Derechos de acceso",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Alta/baja de accesos por empleado; ACT-02 y ACT-07.",
+      "related_risks": "#11"
+    },
+    {
+      "code": "5.19",
+      "name": "Seguridad en relaciones con proveedores",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Dependencia de POS, internet y nube.",
+      "related_risks": "#5"
+    },
+    {
+      "code": "5.20",
+      "name": "Seguridad en acuerdos con proveedores",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "SLA y confidencialidad (Política 3).",
+      "related_risks": "#5"
+    },
+    {
+      "code": "5.21",
+      "name": "Seguridad en la cadena de suministro TIC",
+      "domain": "Organizacional",
+      "decision": "Aplica parcialmente",
+      "justification": "Solo para proveedores TIC críticos (POS, internet, nube).",
+      "related_risks": "#5"
+    },
+    {
+      "code": "5.22",
+      "name": "Seguimiento y revisión de servicios de proveedores",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Revisión anual de SLA (KPI 5).",
+      "related_risks": "#5"
+    },
+    {
+      "code": "5.23",
+      "name": "Seguridad en servicios en la nube",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Respaldos de ventas, facturación e inventario en nube.",
+      "related_risks": "#3"
+    },
+    {
+      "code": "5.24",
+      "name": "Planificación de gestión de incidentes",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Se requiere procedimiento de mesa de ayuda (ACT-14).",
+      "related_risks": "#1,#8"
+    },
+    {
+      "code": "5.25",
+      "name": "Evaluación de eventos de seguridad",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Clasificar fallas críticas vs. no críticas.",
+      "related_risks": "#1"
+    },
+    {
+      "code": "5.26",
+      "name": "Respuesta a incidentes",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Meta: fallas críticas <2 h (cédula LFB-CP-02).",
+      "related_risks": "#1"
+    },
+    {
+      "code": "5.27",
+      "name": "Aprendizaje de incidentes",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Alimenta acciones correctivas y mejora.",
+      "related_risks": "#8"
+    },
+    {
+      "code": "5.28",
+      "name": "Recopilación de evidencias",
+      "domain": "Organizacional",
+      "decision": "Aplica parcialmente",
+      "justification": "Videovigilancia y bitácoras; sin cadena de custodia formal.",
+      "related_risks": "#9"
+    },
+    {
+      "code": "5.29",
+      "name": "Seguridad durante una interrupción",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Modo offline del POS.",
+      "related_risks": "#12"
+    },
+    {
+      "code": "5.30",
+      "name": "Preparación de TIC para continuidad",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "RTO del POS 1 h (2.3.1); planta de luz.",
+      "related_risks": "#1,#12"
+    },
+    {
+      "code": "5.31",
+      "name": "Requisitos legales, regulatorios y contractuales",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "SAT/CFDI, LFPDPPP, NOM-151, NOM-251.",
+      "related_risks": "#11"
+    },
+    {
+      "code": "5.32",
+      "name": "Derechos de propiedad intelectual",
+      "domain": "Organizacional",
+      "decision": "Aplica parcialmente",
+      "justification": "Licencias de POS y software de facturación.",
+      "related_risks": ""
+    },
+    {
+      "code": "5.33",
+      "name": "Protección de registros",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Resguardo de CFDI conforme a NOM-151 y contabilidad.",
+      "related_risks": "#11"
+    },
+    {
+      "code": "5.34",
+      "name": "Privacidad y protección de datos personales (PII)",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Datos de clientes y 70 empleados bajo LFPDPPP.",
+      "related_risks": "#2"
+    },
+    {
+      "code": "5.35",
+      "name": "Revisión independiente de la seguridad",
+      "domain": "Organizacional",
+      "decision": "Aplica parcialmente",
+      "justification": "Auditoría semestral por el CISO del equipo; revisión externa a futuro.",
+      "related_risks": "Todos"
+    },
+    {
+      "code": "5.36",
+      "name": "Cumplimiento de políticas y normas",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Parte de la auditoría interna.",
+      "related_risks": "Todos"
+    },
+    {
+      "code": "5.37",
+      "name": "Procedimientos operativos documentados",
+      "domain": "Organizacional",
+      "decision": "Aplica",
+      "justification": "Cédulas de proceso LFB-CP-01/02 y 3 procedimientos de Fase 2.",
+      "related_risks": "#7"
+    },
+    {
+      "code": "6.1",
+      "name": "Selección de personal",
+      "domain": "Personas",
+      "decision": "Aplica parcialmente",
+      "justification": "Verificación básica para puestos con acceso a caja/TI.",
+      "related_risks": "#2"
+    },
+    {
+      "code": "6.2",
+      "name": "Términos y condiciones de empleo",
+      "domain": "Personas",
+      "decision": "Aplica parcialmente",
+      "justification": "Cláusula de confidencialidad y uso de activos en contratos.",
+      "related_risks": "#2"
+    },
+    {
+      "code": "6.3",
+      "name": "Concienciación, educación y formación",
+      "domain": "Personas",
+      "decision": "Aplica",
+      "justification": "Riesgos #2, #7 y #8.",
+      "related_risks": "#2,#7,#8"
+    },
+    {
+      "code": "6.4",
+      "name": "Proceso disciplinario",
+      "domain": "Personas",
+      "decision": "Aplica parcialmente",
+      "justification": "Se refiere al reglamento interno existente (validar con dirección).",
+      "related_risks": ""
+    },
+    {
+      "code": "6.5",
+      "name": "Responsabilidades tras terminación o cambio de empleo",
+      "domain": "Personas",
+      "decision": "Aplica",
+      "justification": "Revocar accesos al salir un empleado.",
+      "related_risks": "#11"
+    },
+    {
+      "code": "6.6",
+      "name": "Acuerdos de confidencialidad",
+      "domain": "Personas",
+      "decision": "Aplica",
+      "justification": "Personal de caja/TI y proveedores con acceso a datos.",
+      "related_risks": "#2"
+    },
+    {
+      "code": "6.7",
+      "name": "Trabajo remoto",
+      "domain": "Personas",
+      "decision": "No aplica",
+      "justification": "Operación presencial en sucursales; administración no trabaja a distancia. Efecto: sin política de teletrabajo. Reevaluar si cambia.",
+      "related_risks": ""
+    },
+    {
+      "code": "6.8",
+      "name": "Reporte de eventos de seguridad",
+      "domain": "Personas",
+      "decision": "Aplica",
+      "justification": "Meseros/caja reportan fallas al ticket de TI.",
+      "related_risks": "#1,#8"
+    },
+    {
+      "code": "7.1",
+      "name": "Perímetros de seguridad física",
+      "domain": "Físico",
+      "decision": "Aplica",
+      "justification": "Área de router/servidor.",
+      "related_risks": "#12"
+    },
+    {
+      "code": "7.2",
+      "name": "Controles físicos de entrada",
+      "domain": "Físico",
+      "decision": "Aplica",
+      "justification": "Acceso restringido a TI y caja.",
+      "related_risks": "#4"
+    },
+    {
+      "code": "7.3",
+      "name": "Seguridad de oficinas, salas e instalaciones",
+      "domain": "Físico",
+      "decision": "Aplica parcialmente",
+      "justification": "Oficina administrativa y cuarto de equipo.",
+      "related_risks": ""
+    },
+    {
+      "code": "7.4",
+      "name": "Monitorización de seguridad física",
+      "domain": "Físico",
+      "decision": "Aplica",
+      "justification": "Cámaras (ACT-10).",
+      "related_risks": "#9"
+    },
+    {
+      "code": "7.5",
+      "name": "Protección contra amenazas físicas y ambientales",
+      "domain": "Físico",
+      "decision": "Aplica",
+      "justification": "Cocina y refrigeración: calor, fallas eléctricas.",
+      "related_risks": "#6"
+    },
+    {
+      "code": "7.6",
+      "name": "Trabajo en áreas seguras",
+      "domain": "Físico",
+      "decision": "No aplica",
+      "justification": "No existen áreas de alta seguridad (sin sala de servidores dedicada). Efecto bajo.",
+      "related_risks": ""
+    },
+    {
+      "code": "7.7",
+      "name": "Escritorio y pantalla limpios",
+      "domain": "Físico",
+      "decision": "Aplica parcialmente",
+      "justification": "Aplica en caja y administración (datos de clientes).",
+      "related_risks": "#2"
+    },
+    {
+      "code": "7.8",
+      "name": "Emplazamiento y protección de equipos",
+      "domain": "Físico",
+      "decision": "Aplica",
+      "justification": "POS, router e impresoras lejos de calor/humedad.",
+      "related_risks": "#1"
+    },
+    {
+      "code": "7.9",
+      "name": "Seguridad de activos fuera de las instalaciones",
+      "domain": "Físico",
+      "decision": "Aplica",
+      "justification": "Celulares/tablets de delivery y equipos de ferias.",
+      "related_risks": "#9"
+    },
+    {
+      "code": "7.10",
+      "name": "Medios de almacenamiento",
+      "domain": "Físico",
+      "decision": "Aplica parcialmente",
+      "justification": "Disco externo del respaldo mensual.",
+      "related_risks": "#3"
+    },
+    {
+      "code": "7.11",
+      "name": "Servicios de suministro",
+      "domain": "Físico",
+      "decision": "Aplica",
+      "justification": "Corte eléctrico: planta de luz/UPS.",
+      "related_risks": "#12"
+    },
+    {
+      "code": "7.12",
+      "name": "Seguridad del cableado",
+      "domain": "Físico",
+      "decision": "Aplica parcialmente",
+      "justification": "La falla eléctrica y de cableado de POS y router alimenta los riesgos #1 y #12. Se revisa el cableado en el mantenimiento preventivo trimestral.",
+      "related_risks": "#1,#12"
+    },
+    {
+      "code": "7.13",
+      "name": "Mantenimiento de equipos",
+      "domain": "Físico",
+      "decision": "Aplica",
+      "justification": "Mantenimiento preventivo trimestral (cédula).",
+      "related_risks": "#1"
+    },
+    {
+      "code": "7.14",
+      "name": "Eliminación o reutilización segura de equipos",
+      "domain": "Físico",
+      "decision": "Aplica",
+      "justification": "Baja de equipos con datos (Paso 8 de 2.2).",
+      "related_risks": "#9"
+    },
+    {
+      "code": "8.1",
+      "name": "Dispositivos finales de usuario",
+      "domain": "Tecnológico",
+      "decision": "Aplica",
+      "justification": "Celulares/tablets de trabajo (ACT-13).",
+      "related_risks": "#9"
+    },
+    {
+      "code": "8.2",
+      "name": "Derechos de acceso privilegiado",
+      "domain": "Tecnológico",
+      "decision": "Aplica",
+      "justification": "Administrador del POS y router.",
+      "related_risks": "#4"
+    },
+    {
+      "code": "8.3",
+      "name": "Restricción de acceso a la información",
+      "domain": "Tecnológico",
+      "decision": "Aplica",
+      "justification": "Acceso a contabilidad y clientes por rol.",
+      "related_risks": "#2"
+    },
+    {
+      "code": "8.4",
+      "name": "Acceso al código fuente",
+      "domain": "Tecnológico",
+      "decision": "Aplica parcialmente",
+      "justification": "La empresa no desarrolla software, pero la Fase 2 incluye un sistema web o API de un proceso de TI hecho por el equipo consultor. Se aplica solo a ese módulo: repositorio privado y acceso por rol.",
+      "related_risks": ""
+    },
+    {
+      "code": "8.5",
+      "name": "Autenticación segura",
+      "domain": "Tecnológico",
+      "decision": "Aplica parcialmente",
+      "justification": "Contraseña robusta; MFA en nube y correo.",
+      "related_risks": "#4"
+    },
+    {
+      "code": "8.6",
+      "name": "Gestión de capacidad",
+      "domain": "Tecnológico",
+      "decision": "Aplica parcialmente",
+      "justification": "Ancho de banda de internet en hora pico.",
+      "related_risks": "#1"
+    },
+    {
+      "code": "8.7",
+      "name": "Protección contra malware",
+      "domain": "Tecnológico",
+      "decision": "Aplica",
+      "justification": "Antivirus en computadoras (ACT-11).",
+      "related_risks": "#2"
+    },
+    {
+      "code": "8.8",
+      "name": "Gestión de vulnerabilidades técnicas",
+      "domain": "Tecnológico",
+      "decision": "Aplica parcialmente",
+      "justification": "Actualizaciones de POS y router; sin escaneo formal.",
+      "related_risks": "#4"
+    },
+    {
+      "code": "8.9",
+      "name": "Gestión de la configuración",
+      "domain": "Tecnológico",
+      "decision": "Aplica parcialmente",
+      "justification": "Configuración documentada de POS y red.",
+      "related_risks": "#4"
+    },
+    {
+      "code": "8.10",
+      "name": "Eliminación de información",
+      "domain": "Tecnológico",
+      "decision": "Aplica parcialmente",
+      "justification": "Borrado seguro ligado a baja de equipos.",
+      "related_risks": "#9"
+    },
+    {
+      "code": "8.11",
+      "name": "Enmascaramiento de datos",
+      "domain": "Tecnológico",
+      "decision": "No aplica",
+      "justification": "No hay entornos de prueba ni reportes que lo requieran. Datos de tarjeta los procesa el proveedor del POS.",
+      "related_risks": ""
+    },
+    {
+      "code": "8.12",
+      "name": "Prevención de fuga de datos",
+      "domain": "Tecnológico",
+      "decision": "Aplica parcialmente",
+      "justification": "Se cubre con permisos y capacitación; sin herramienta DLP.",
+      "related_risks": "#2"
+    },
+    {
+      "code": "8.13",
+      "name": "Copias de seguridad",
+      "domain": "Tecnológico",
+      "decision": "Aplica",
+      "justification": "Semanal en nube + mensual en disco; prueba de restauración.",
+      "related_risks": "#1,#3"
+    },
+    {
+      "code": "8.14",
+      "name": "Redundancia de instalaciones de procesamiento",
+      "domain": "Tecnológico",
+      "decision": "Aplica",
+      "justification": "Terminal de respaldo del POS.",
+      "related_risks": "#1"
+    },
+    {
+      "code": "8.15",
+      "name": "Registro de eventos",
+      "domain": "Tecnológico",
+      "decision": "Aplica",
+      "justification": "Bitácora del POS y de incidencias.",
+      "related_risks": "#4"
+    },
+    {
+      "code": "8.16",
+      "name": "Actividades de seguimiento",
+      "domain": "Tecnológico",
+      "decision": "Aplica",
+      "justification": "Monitoreo de red/POS y sensores de temperatura.",
+      "related_risks": "#4,#6"
+    },
+    {
+      "code": "8.17",
+      "name": "Sincronización de relojes",
+      "domain": "Tecnológico",
+      "decision": "Aplica parcialmente",
+      "justification": "POS, router, cámaras (ACT-10) y equipo de respaldo deben compartir la misma hora de red para que las bitácoras (8.15) y las grabaciones sean confiables. No hay SIEM, por eso es parcial.",
+      "related_risks": "#4"
+    },
+    {
+      "code": "8.18",
+      "name": "Uso de programas utilitarios privilegiados",
+      "domain": "Tecnológico",
+      "decision": "Aplica parcialmente",
+      "justification": "El Responsable de TI usa utilidades privilegiadas en POS y router. Se restringe su uso a ese rol y se registran sus accesos. El resto del personal no las usa.",
+      "related_risks": "#4"
+    },
+    {
+      "code": "8.19",
+      "name": "Instalación de software en sistemas operativos",
+      "domain": "Tecnológico",
+      "decision": "Aplica parcialmente",
+      "justification": "Solo apps autorizadas en equipos y celulares.",
+      "related_risks": "#9"
+    },
+    {
+      "code": "8.20",
+      "name": "Seguridad de redes",
+      "domain": "Tecnológico",
+      "decision": "Aplica",
+      "justification": "Router y Wi-Fi administrativa (ACT-08).",
+      "related_risks": "#4"
+    },
+    {
+      "code": "8.21",
+      "name": "Seguridad de servicios de red",
+      "domain": "Tecnológico",
+      "decision": "Aplica parcialmente",
+      "justification": "SLA del proveedor de internet.",
+      "related_risks": "#12"
+    },
+    {
+      "code": "8.22",
+      "name": "Segregación de redes",
+      "domain": "Tecnológico",
+      "decision": "Aplica",
+      "justification": "Wi-Fi de clientes aislada de la administrativa (ACT-09).",
+      "related_risks": "#4"
+    },
+    {
+      "code": "8.23",
+      "name": "Filtrado web",
+      "domain": "Tecnológico",
+      "decision": "Aplica parcialmente",
+      "justification": "Se aplica filtrado básico en las computadoras administrativas y en la Wi-Fi de clientes (ACT-09). En caja no hay navegación libre.",
+      "related_risks": "#4"
+    },
+    {
+      "code": "8.24",
+      "name": "Uso de criptografía",
+      "domain": "Tecnológico",
+      "decision": "Aplica",
+      "justification": "Cifrado de BD de clientes y CFDI.",
+      "related_risks": "#2"
+    },
+    {
+      "code": "8.25",
+      "name": "Ciclo de vida de desarrollo seguro",
+      "domain": "Tecnológico",
+      "decision": "Aplica parcialmente",
+      "justification": "Aplica solo al módulo de Fase 2 desarrollado por el equipo consultor (requisitos, revisión y pruebas básicas). La empresa no tiene desarrollo propio.",
+      "related_risks": ""
+    },
+    {
+      "code": "8.26",
+      "name": "Requisitos de seguridad de aplicaciones",
+      "domain": "Tecnológico",
+      "decision": "Aplica parcialmente",
+      "justification": "Solo al adquirir aplicaciones (POS, inventario).",
+      "related_risks": "#2"
+    },
+    {
+      "code": "8.27",
+      "name": "Arquitectura de sistemas e ingeniería segura",
+      "domain": "Tecnológico",
+      "decision": "Aplica parcialmente",
+      "justification": "Se aplica al diseño del módulo de Fase 2 (roles, autenticación, separación de datos). La empresa no diseña otros sistemas.",
+      "related_risks": ""
+    },
+    {
+      "code": "8.28",
+      "name": "Codificación segura",
+      "domain": "Tecnológico",
+      "decision": "Aplica parcialmente",
+      "justification": "Se aplica al código del módulo de Fase 2 (validación de entradas, manejo de credenciales). Fuera de ese módulo no hay desarrollo.",
+      "related_risks": ""
+    },
+    {
+      "code": "8.29",
+      "name": "Pruebas de seguridad en desarrollo y aceptación",
+      "domain": "Tecnológico",
+      "decision": "Aplica parcialmente",
+      "justification": "Prueba de aceptación al instalar terminal de respaldo.",
+      "related_risks": "#1"
+    },
+    {
+      "code": "8.30",
+      "name": "Desarrollo subcontratado",
+      "domain": "Tecnológico",
+      "decision": "No aplica",
+      "justification": "La empresa no subcontrata desarrollo. El módulo de Fase 2 lo hace el equipo consultor como entregable y queda cubierto por los controles 8.25 a 8.28. Efecto: sin cláusulas de desarrollo subcontratado. Se reevalúa si un proveedor externo lo continúa.",
+      "related_risks": ""
+    },
+    {
+      "code": "8.31",
+      "name": "Separación de entornos",
+      "domain": "Tecnológico",
+      "decision": "Aplica parcialmente",
+      "justification": "El módulo de Fase 2 se prueba en un entorno distinto del que use la empresa. El resto de la operación no tiene entornos de desarrollo.",
+      "related_risks": ""
+    },
+    {
+      "code": "8.32",
+      "name": "Gestión de cambios",
+      "domain": "Tecnológico",
+      "decision": "Aplica parcialmente",
+      "justification": "Cambios en POS, red y facturación.",
+      "related_risks": "#1"
+    },
+    {
+      "code": "8.33",
+      "name": "Información de prueba",
+      "domain": "Tecnológico",
+      "decision": "Aplica parcialmente",
+      "justification": "Las pruebas del módulo de Fase 2 deben usar datos ficticios, no datos reales de clientes ni de facturación.",
+      "related_risks": "#2"
+    },
+    {
+      "code": "8.34",
+      "name": "Protección de sistemas durante pruebas de auditoría",
+      "domain": "Tecnológico",
+      "decision": "Aplica parcialmente",
+      "justification": "Auditorías internas/SAT sobre sistemas productivos.",
+      "related_risks": "#11"
+    }
+  ],
+  "risks": [
+    {
+      "id": 1,
+      "risk": "Falla del POS en hora pico impide cobrar",
+      "type": "Tecnológico",
+      "affects": "D",
+      "assets": "ACT-01, ACT-02, ACT-08",
+      "vulnerability": "POS sin terminal de respaldo",
+      "threat": "Falla de internet o de energía en hora pico",
+      "existing_controls": "Respaldo diario del POS; personal de TI y política de TI documentada",
+      "owner": "Responsable de TI",
+      "impact": 5,
+      "probability": 4,
+      "level": 20,
+      "semaphore": "Alto",
+      "strategy": "Mitigar",
+      "treatment": "Terminal de respaldo / modo offline"
+    },
+    {
+      "id": 2,
+      "risk": "Filtración de datos de clientes o CFDI",
+      "type": "Tecnológico",
+      "affects": "C",
+      "assets": "ACT-03, ACT-04",
+      "vulnerability": "Personal con distinta cultura digital; base de datos de clientes sin cifrado confirmado",
+      "threat": "Ataques o filtraciones de datos",
+      "existing_controls": "Acceso limitado por rol; cifrado en el software de facturación (ACT-03)",
+      "owner": "Administración",
+      "impact": 5,
+      "probability": 3,
+      "level": 15,
+      "semaphore": "Alto",
+      "strategy": "Mitigar",
+      "treatment": "Cifrado de base de datos, capacitación anual"
+    },
+    {
+      "id": 3,
+      "risk": "Pérdida de información por falta de respaldo",
+      "type": "Tecnológico",
+      "affects": "D, I",
+      "assets": "ACT-06, ACT-07, ACT-16",
+      "vulnerability": "Respaldos sin prueba de restauración",
+      "threat": "Falla de equipo o pérdida de datos",
+      "existing_controls": "Respaldo semanal en nube y mensual en disco externo",
+      "owner": "Administración",
+      "impact": 4,
+      "probability": 2,
+      "level": 8,
+      "semaphore": "Medio",
+      "strategy": "Mitigar",
+      "treatment": "Respaldo automático en nube + prueba semestral"
+    },
+    {
+      "id": 4,
+      "risk": "Acceso no autorizado a la red Wi-Fi administrativa",
+      "type": "Tecnológico",
+      "affects": "C",
+      "assets": "ACT-08, ACT-09",
+      "vulnerability": "Contraseña de la Wi-Fi administrativa sin rotación periódica",
+      "threat": "Acceso indebido a la red",
+      "existing_controls": "Red separada de la Wi-Fi de clientes; contraseña robusta",
+      "owner": "Responsable de TI",
+      "impact": 4,
+      "probability": 2,
+      "level": 8,
+      "semaphore": "Medio",
+      "strategy": "Mitigar",
+      "treatment": "Cambio periódico de contraseña, monitoreo"
+    },
+    {
+      "id": 5,
+      "risk": "Desabasto de cortes de carne por falla de proveedor",
+      "type": "Proveedores",
+      "affects": "D",
+      "assets": "ACT-05, ACT-19",
+      "vulnerability": "Dependencia de un solo proveedor de cortes",
+      "threat": "Falla del proveedor",
+      "existing_controls": "Contratos con proveedores (ACT-19)",
+      "owner": "Encargado de compras",
+      "impact": 4,
+      "probability": 3,
+      "level": 12,
+      "semaphore": "Medio",
+      "strategy": "Mitigar",
+      "treatment": "Segundo proveedor de respaldo certificado"
+    },
+    {
+      "id": 6,
+      "risk": "Ruptura de cadena de frío en insumos",
+      "type": "Inocuidad alimentaria",
+      "affects": "D, I",
+      "assets": "ACT-06, ACT-07",
+      "vulnerability": "Refrigeración sin sensores de temperatura",
+      "threat": "Falla del equipo de refrigeración o de la energía",
+      "existing_controls": "Mantenimiento preventivo trimestral (cédula LFB-CP-02)",
+      "owner": "Encargado de compras",
+      "impact": 5,
+      "probability": 4,
+      "level": 20,
+      "semaphore": "Alto",
+      "strategy": "Mitigar",
+      "treatment": "Sensor de temperatura con alerta automática"
+    },
+    {
+      "id": 7,
+      "risk": "Error humano en toma de comanda",
+      "type": "Operativo",
+      "affects": "I",
+      "assets": "ACT-12, ACT-17",
+      "vulnerability": "Comanda sin verificación antes de enviarla a cocina",
+      "threat": "Error del personal o rotación",
+      "existing_controls": "Personal capacitado (ACT-17)",
+      "owner": "Gerente de sucursal",
+      "impact": 2,
+      "probability": 3,
+      "level": 6,
+      "semaphore": "Medio",
+      "strategy": "Mitigar",
+      "treatment": "Checklist antes de enviar a cocina"
+    },
+    {
+      "id": 8,
+      "risk": "Falta de personal capacitado en TI ante incidente",
+      "type": "Operativo",
+      "affects": "D",
+      "assets": "ACT-14, ACT-15, ACT-17",
+      "vulnerability": "Pocas personas capacitadas en TI",
+      "threat": "Incidente crítico cuando no está el responsable de TI",
+      "existing_controls": "Mesa de ayuda externa con SLA (ACT-15)",
+      "owner": "Responsable de TI",
+      "impact": 3,
+      "probability": 3,
+      "level": 9,
+      "semaphore": "Medio",
+      "strategy": "Mitigar",
+      "treatment": "Capacitación cruzada de 2 o más personas"
+    },
+    {
+      "id": 9,
+      "risk": "Pérdida o robo de equipo de trabajo",
+      "type": "Tecnológico",
+      "affects": "C, D",
+      "assets": "ACT-13",
+      "vulnerability": "Celulares y tablets sin localización remota",
+      "threat": "Robo o pérdida del equipo",
+      "existing_controls": "Bloqueo con contraseña; solo apps autorizadas",
+      "owner": "Gerente de sucursal",
+      "impact": 3,
+      "probability": 2,
+      "level": 6,
+      "semaphore": "Medio",
+      "strategy": "Mitigar",
+      "treatment": "Localización remota, borrado a distancia"
+    },
+    {
+      "id": 10,
+      "risk": "Daño reputacional en redes sociales",
+      "type": "Reputacional",
+      "affects": "I",
+      "assets": "ACT-18",
+      "vulnerability": "Sin protocolo escrito de manejo de crisis",
+      "threat": "Queja o publicación negativa que se vuelve viral",
+      "existing_controls": "Monitoreo de redes sociales",
+      "owner": "Dueño",
+      "impact": 4,
+      "probability": 2,
+      "level": 8,
+      "semaphore": "Medio",
+      "strategy": "Mitigar",
+      "treatment": "Protocolo escrito de manejo de crisis"
+    },
+    {
+      "id": 11,
+      "risk": "Incumplimiento fiscal por mal resguardo de CFDI",
+      "type": "Cumplimiento legal",
+      "affects": "I, D",
+      "assets": "ACT-03, ACT-16",
+      "vulnerability": "Resguardo de CFDI sin auditoría periódica",
+      "threat": "Auditoría del SAT",
+      "existing_controls": "Respaldo conforme a NOM-151 (ACT-03)",
+      "owner": "Administración",
+      "impact": 5,
+      "probability": 1,
+      "level": 5,
+      "semaphore": "Bajo",
+      "strategy": "Aceptar con monitoreo",
+      "treatment": "Auditoría interna anual de resguardo fiscal"
+    },
+    {
+      "id": 12,
+      "risk": "Interrupción total por falla eléctrica o de internet",
+      "type": "Tecnológico",
+      "affects": "D",
+      "assets": "ACT-01, ACT-08",
+      "vulnerability": "Sin planta de luz de respaldo",
+      "threat": "Corte eléctrico o falla del proveedor de internet",
+      "existing_controls": "Ninguno documentado",
+      "owner": "Responsable de TI",
+      "impact": 4,
+      "probability": 2,
+      "level": 8,
+      "semaphore": "Medio",
+      "strategy": "Mitigar",
+      "treatment": "Planta de luz de respaldo / plan de continuidad"
+    }
+  ],
+  "traceability": [
+    {
+      "risk_id": 1,
+      "origin_req": "27001 Cl. 6.1 y 8; 38500 Desempeño",
+      "risk": "Falla del POS en hora pico impide cobrar",
+      "controls": "8.14; 8.13; 5.30; 7.13",
+      "cobit": "DSS04; DSS02",
+      "procedure": "PR-TI-01 Soporte y mantenimiento (LFB-CP-02)",
+      "record_format": "FR-TI-01 Ticket de incidencia",
+      "kpi": "Disponibilidad POS ≥99%; fallas críticas <2 h"
+    },
+    {
+      "risk_id": 2,
+      "origin_req": "27001 Cl. 6.1; LFPDPPP; 38500 Conformidad",
+      "risk": "Filtración de datos de clientes o CFDI",
+      "controls": "5.34; 8.24; 6.3; 5.15",
+      "cobit": "APO12",
+      "procedure": "PR-SI-01 Protección de datos personales",
+      "record_format": "FR-SI-02 Registro de capacitación",
+      "kpi": "% personal capacitado 100%"
+    },
+    {
+      "risk_id": 3,
+      "origin_req": "27001 Cl. 6.1 y 8; 27002 8.13",
+      "risk": "Pérdida de información por falta de respaldo",
+      "controls": "8.13; 5.23",
+      "cobit": "DSS04",
+      "procedure": "PR-TI-02 Respaldo y restauración",
+      "record_format": "FR-TI-02 Bitácora de respaldos",
+      "kpi": "% restauración exitosa 100%"
+    },
+    {
+      "risk_id": 4,
+      "origin_req": "27001 Cl. 6.1; 27002 5.15",
+      "risk": "Acceso no autorizado a la red Wi-Fi administrativa",
+      "controls": "5.15; 8.20; 8.22; 8.16",
+      "cobit": "APO12",
+      "procedure": "PR-TI-01",
+      "record_format": "FR-TI-03 Revisión de accesos",
+      "kpi": "Incidentes de seguridad (tendencia a la baja)"
+    },
+    {
+      "risk_id": 5,
+      "origin_req": "22000 Cl. 6 y 8.3; 27001 5.19",
+      "risk": "Desabasto de cortes de carne por falla de proveedor",
+      "controls": "5.19; 5.20; 5.22",
+      "cobit": "APO12",
+      "procedure": "PR-CA-01 Compra y abastecimiento (LFB-CP-01)",
+      "record_format": "FR-CA-01 Evaluación de proveedores",
+      "kpi": "% proveedores críticos con SLA 100%; desabasto 0/semana"
+    },
+    {
+      "risk_id": 6,
+      "origin_req": "22000 Cl. 8.2 (PPR) y 8.5; NOM-251",
+      "risk": "Ruptura de cadena de frío en insumos",
+      "controls": "8.16; 7.5; ISO 22000 8.2",
+      "cobit": "BAI09",
+      "procedure": "PR-CA-02 Control de cadena de frío",
+      "record_format": "FR-CA-02 Bitácora de temperatura",
+      "kpi": "Rupturas de cadena de frío 0"
+    },
+    {
+      "risk_id": 7,
+      "origin_req": "27001 Cl. 7.2; 22000 Cl. 7",
+      "risk": "Error humano en toma de comanda",
+      "controls": "6.3; 5.37",
+      "cobit": "APO12",
+      "procedure": "PR-AC-01 Atención en salón",
+      "record_format": "FR-AC-01 Checklist de comanda",
+      "kpi": "Errores de comanda por semana"
+    },
+    {
+      "risk_id": 8,
+      "origin_req": "27001 Cl. 7.2 y 7.3; 38500 Conducta humana",
+      "risk": "Falta de personal capacitado en TI ante incidente",
+      "controls": "6.3; 5.24; 5.2",
+      "cobit": "DSS02",
+      "procedure": "PR-TI-01",
+      "record_format": "FR-SI-02",
+      "kpi": "Personal con capacitación cruzada ≥2"
+    },
+    {
+      "risk_id": 9,
+      "origin_req": "27001 Cl. 6.1; 27002 7.9 y 8.1",
+      "risk": "Pérdida o robo de equipo de trabajo",
+      "controls": "8.1; 7.9; 7.14",
+      "cobit": "BAI09",
+      "procedure": "PR-TI-03 Gestión de activos",
+      "record_format": "FR-TI-04 Resguardo de equipos",
+      "kpi": "Equipos inventariados 100%"
+    },
+    {
+      "risk_id": 10,
+      "origin_req": "38500 Responsabilidad; 27001 Cl. 4.2",
+      "risk": "Daño reputacional en redes sociales",
+      "controls": "5.10; 5.4",
+      "cobit": "APO12",
+      "procedure": "PR-DI-01 Protocolo de manejo de crisis",
+      "record_format": "FR-DI-01 Reporte de crisis",
+      "kpi": "Tiempo de respuesta a quejas"
+    },
+    {
+      "risk_id": 11,
+      "origin_req": "NOM-151 y SAT; 27001 5.31; 38500 Conformidad",
+      "risk": "Incumplimiento fiscal por mal resguardo de CFDI",
+      "controls": "5.33; 5.31; 5.18",
+      "cobit": "APO12",
+      "procedure": "PR-FC-01 Facturación y cobro",
+      "record_format": "FR-FC-01 Registro de resguardo CFDI",
+      "kpi": "CFDI resguardados 100%"
+    },
+    {
+      "risk_id": 12,
+      "origin_req": "27001 Cl. 6.1 y 8; 5.29 y 5.30",
+      "risk": "Interrupción total por falla eléctrica o de internet",
+      "controls": "7.11; 5.29; 5.30; 8.21",
+      "cobit": "DSS04",
+      "procedure": "PR-TI-04 Plan de continuidad",
+      "record_format": "FR-TI-05 Prueba de continuidad",
+      "kpi": "Tiempo de recuperación ≤ RTO 1 h"
+    }
+  ]
+}

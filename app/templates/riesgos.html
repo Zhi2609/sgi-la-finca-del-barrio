@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}Riesgos y Tratamiento · {{ company.name }}{% endblock %}
+{% block page_heading %}Matriz de Contexto, Riesgos (LFB-MCGR-01) y Plan de Tratamiento{% endblock %}
+{% block content %}
+
+<section class="bg-white rounded-xl border border-crema-200 p-5 shadow-sm mb-6">
+  <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+    <div>
+      <h2 class="text-base font-bold text-vino-900">Mapa de Calor (Impacto × Probabilidad)</h2>
+      <p class="text-xs text-stone-500">Escala 1–5 · Verde (1–5 Aceptable) · Amarillo (6–12 Tolerable) · Rojo (15–25 Crítico/Inaceptable)</p>
+    </div>
+    <a href="/documentos/LFB-PTR-01/imprimir" target="_blank" class="px-3 py-1.5 rounded-lg bg-vino-800 text-white text-xs font-semibold">
+      Imprimir Metodología LFB-PTR-01
+    </a>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-xs border-collapse text-center">
+      <thead>
+        <tr class="text-stone-600">
+          <th class="p-2 text-left">Impacto \ Probabilidad</th>
+          <th class="p-2">1 Raro</th><th class="p-2">2 Improbable</th><th class="p-2">3 Posible</th><th class="p-2">4 Probable</th><th class="p-2">5 Casi seguro</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for imp in [5, 4, 3, 2, 1] %}
+        <tr>
+          <th class="p-2 text-left bg-crema-50 border border-crema-200 font-semibold">{{ imp }}</th>
+          {% for prob in [1, 2, 3, 4, 5] %}
+            {% set sc = imp * prob %}
+            {% set cells = heatmap.get((imp, prob), []) %}
+            {% set cls = 'bg-red-100 border-red-300 text-red-900' if sc >= 15 else ('bg-amber-100 border-amber-300 text-amber-900' if sc >= 6 else 'bg-emerald-50 border-emerald-200 text-emerald-900') %}
+            <td class="p-2 border {{ cls }}">
+              {% for cr in cells %}
+              <div class="px-1.5 py-0.5 rounded bg-white/85 border border-current font-bold text-[11px] mb-0.5">
+                #{{ cr.risk_num }} · {{ cr.level }}
+              </div>
+              {% else %}
+              <span class="text-stone-400">—</span>
+              {% endfor %}
+            </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="bg-white rounded-xl border border-crema-200 shadow-sm overflow-hidden">
+  <div class="table-wrapper" tabindex="0" role="region" aria-labelledby="risks-cap">
+    <table class="sgi-table text-xs text-left">
+      <caption id="risks-cap" class="sr-only">Matriz de riesgos y plan de tratamiento</caption>
+      <thead class="bg-vino-900 text-crema-50">
+        <tr>
+          <th class="p-3">#</th>
+          <th class="p-3">Riesgo y Activos</th>
+          <th class="p-3">Vulnerabilidad / Amenaza</th>
+          <th class="p-3">I×P</th>
+          <th class="p-3">Tratamiento Propuesto</th>
+          <th class="p-3">Plan de Acción y Seguimiento (Cl. 8)</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-crema-100">
+        {% for r in risks %}
+        <tr class="hover:bg-crema-50/60">
+          <th class="p-3 font-bold text-vino-900 align-top">#{{ r.risk_num }}</th>
+          <td class="p-3 align-top">
+            <div class="font-bold text-stone-900">{{ r.title }}</div>
+            <div class="text-[11px] text-stone-500 mt-0.5">{{ r.risk_type }} · Afecta: <strong>{{ r.affects_cid }}</strong> · {{ r.related_assets }}</div>
+            <div class="text-[11px] text-stone-600 mt-0.5">Propietario: {{ r.owner_role }}</div>
+          </td>
+          <td class="p-3 align-top text-stone-600">
+            <div><strong>Vuln:</strong> {{ r.vulnerability }}</div>
+            <div><strong>Amenaza:</strong> {{ r.threat }}</div>
+            <div class="text-[11px] text-stone-500 mt-0.5"><strong>Actual:</strong> {{ r.existing_controls }}</div>
+          </td>
+          <td class="p-3 align-top text-center">
+            <span class="inline-block px-2 py-1 rounded-full font-bold {{ 'bg-red-100 text-red-800' if r.semaphore == 'Alto' else ('bg-amber-100 text-amber-800' if r.semaphore == 'Medio' else 'bg-emerald-100 text-emerald-800') }}">
+              {{ r.level }} ({{ r.semaphore }})
+            </span>
+            <div class="text-[11px] text-stone-500 mt-1">{{ r.impact }}×{{ r.probability }} → Res: {{ r.residual_impact * r.residual_probability }}</div>
+          </td>
+          <td class="p-3 align-top">
+            <span class="px-1.5 py-0.5 rounded bg-vino-50 text-vino-800 font-semibold">{{ r.strategy }}</span>
+            <p class="mt-1 text-stone-700">{{ r.treatment_plan }}</p>
+          </td>
+          <td class="p-3 align-top">
+            {% if user.can_write %}
+            <form action="/riesgos/{{ r.risk_num }}/tratamiento" method="post" class="space-y-1.5 min-w-[190px]">
+              <select name="treatment_status" class="w-full rounded border border-crema-200 px-2 py-1 bg-crema-50 font-semibold">
+                <option {{ 'selected' if r.treatment_status == 'Implementado' else '' }}>Implementado</option>
+                <option {{ 'selected' if r.treatment_status == 'En progreso' else '' }}>En progreso</option>
+                <option {{ 'selected' if r.treatment_status == 'Pendiente' else '' }}>Pendiente</option>
+              </select>
+              <input name="treatment_responsible" value="{{ r.treatment_responsible }}" class="w-full rounded border border-crema-200 px-2 py-1 text-[11px]" />
+              <div class="flex gap-1">
+                <input name="treatment_deadline" value="{{ r.treatment_deadline }}" class="w-full rounded border border-crema-200 px-2 py-1 text-[11px]" />
+                <button type="submit" class="px-2.5 py-1 rounded bg-vino-800 text-white font-semibold shrink-0">Guardar</button>
+              </div>
+            </form>
+            {% else %}
+            <div class="text-[11px]">
+              <span class="px-2 py-0.5 rounded-full font-semibold bg-crema-100">{{ r.treatment_status }}</span>
+              <p class="mt-1">{{ r.treatment_responsible }} · {{ r.treatment_deadline }}</p>
+            </div>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ doc.code }} · {{ doc.title }}</title>
+  <link rel="stylesheet" href="/static/css/app.css" />
+</head>
+<body class="bg-stone-100 text-stone-900 p-4 md:p-8">
+  <div class="no-print max-w-4xl mx-auto mb-4 flex items-center justify-between bg-vino-900 text-crema-50 px-4 py-2.5 rounded-lg">
+    <a href="/documentos" class="text-xs font-semibold text-oro-300 hover:underline">← Volver al Control Documental</a>
+    <button type="button" onclick="window.print()" class="px-4 py-1.5 rounded bg-oro-500 text-vino-950 text-xs font-bold hover:bg-oro-300">
+      Imprimir / Guardar PDF Oficial
+    </button>
+  </div>
+
+  <article class="max-w-4xl mx-auto bg-white border border-stone-300 shadow-sm p-8">
+    <!-- Institutional Header & Document Control Table -->
+    <header class="border-2 border-vino-900 mb-6">
+      <div class="grid grid-cols-12 border-b-2 border-vino-900">
+        <div class="col-span-3 p-3 bg-vino-900 text-crema-50 flex flex-col items-center justify-center text-center border-r-2 border-vino-900">
+          <svg class="w-8 h-8 text-oro-300 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 4v5c0 4.5-3 8.2-7 9.5-4-1.3-7-5-7-9.5V7l7-4z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/>
+          </svg>
+          <span class="text-xs font-bold tracking-wider text-oro-300 uppercase">{{ company.name }}</span>
+          <span class="text-[10px] text-crema-200">{{ company.slogan }}</span>
+        </div>
+        <div class="col-span-6 p-3 flex flex-col justify-center border-r-2 border-vino-900">
+          <p class="text-[10px] uppercase tracking-wider text-vino-700 font-bold">Sistema de Gestión Integral (SGI)</p>
+          <h1 class="text-base font-bold text-stone-900 leading-tight mt-0.5">{{ doc.title }}</h1>
+          <p class="text-[11px] text-stone-600 mt-1">{{ doc.norms }}</p>
+        </div>
+        <div class="col-span-3 text-[11px] divide-y divide-stone-300">
+          <div class="p-1.5 flex justify-between"><span class="font-bold">Código:</span><span class="font-mono">{{ doc.code }}</span></div>
+          <div class="p-1.5 flex justify-between"><span class="font-bold">Folio:</span><span class="font-mono">{{ doc.folio }}</span></div>
+          <div class="p-1.5 flex justify-between"><span class="font-bold">Versión:</span><span>{{ doc.version }}</span></div>
+          <div class="p-1.5 flex justify-between"><span class="font-bold">Estado:</span><span>{{ doc.status }}</span></div>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 text-[11px] bg-crema-50 divide-x divide-stone-300">
+        <div class="p-2"><strong>Fecha elaboración:</strong> {{ doc.elaborated_date }}</div>
+        <div class="p-2"><strong>Fecha aprobación:</strong> {{ doc.approved_date }}</div>
+        <div class="p-2"><strong>Categoría:</strong> {{ doc.category }}</div>
+      </div>
+    </header>
+
+    <div class="mb-6 p-3 rounded bg-crema-50 border border-crema-200 text-xs text-stone-700">
+      <strong>Resumen ejecutivo:</strong> {{ doc.summary }}
+    </div>
+
+    <div class="prose-sm max-w-none">
+      {{ doc.content_html | safe }}
+    </div>
+
+    <!-- Signatures block -->
+    <section class="mt-10 pt-6 border-t-2 border-vino-900 print-break-inside-avoid">
+      <h2 class="text-xs font-bold uppercase text-vino-900 mb-4">Control de Elaboración, Revisión y Autorización</h2>
+      <div class="grid grid-cols-3 gap-6 text-center text-xs">
+        <div class="border border-stone-300 rounded p-3">
+          <div class="h-10 border-b border-stone-400 mb-2 flex items-end justify-center pb-1 font-serif italic text-vino-800">{{ doc.elaborated_by.split('(')[0] }}</div>
+          <p class="font-bold">Elaboró</p>
+          <p class="text-stone-600 text-[11px]">{{ doc.elaborated_by }}</p>
+        </div>
+        <div class="border border-stone-300 rounded p-3">
+          <div class="h-10 border-b border-stone-400 mb-2 flex items-end justify-center pb-1 font-serif italic text-vino-800">{{ doc.reviewed_by.split('(')[0] }}</div>
+          <p class="font-bold">Revisó</p>
+          <p class="text-stone-600 text-[11px]">{{ doc.reviewed_by }}</p>
+        </div>
+        <div class="border border-stone-300 rounded p-3">
+          <div class="h-10 border-b border-stone-400 mb-2 flex items-end justify-center pb-1 font-serif italic text-vino-800">{{ doc.approved_by.split('(')[0] }}</div>
+          <p class="font-bold">Autorizó</p>
+          <p class="text-stone-600 text-[11px]">{{ doc.approved_by }}</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="mt-8 pt-3 border-t border-stone-200 text-[10px] text-stone-500 flex justify-between">
+      <span>{{ company.name }} · {{ company.address }} · Tel. {{ company.phone }}</span>
+      <span>{{ company.website }} · {{ company.email }}</span>
+    </footer>
+  </article>
+</body>
+</html>

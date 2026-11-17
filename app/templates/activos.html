@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}Activos de TI · {{ company.name }}{% endblock %}
+{% block page_heading %}Inventario y Clasificación de Activos (ACT-01 a ACT-20 · Control 5.9){% endblock %}
+{% block content %}
+
+<div class="bg-white rounded-xl border border-crema-200 p-4 shadow-sm mb-5 flex flex-wrap items-end justify-between gap-3">
+  <form hx-get="/activos" hx-target="#assets-table-region" hx-trigger="change, keyup delay:250ms from:input"
+        class="flex flex-wrap items-end gap-3 text-xs">
+    <div>
+      <label class="block font-semibold text-stone-600 mb-1">Buscar</label>
+      <input name="q" value="{{ q }}" placeholder="ACT-01, POS, CFDI..." class="rounded-lg border border-crema-200 px-3 py-1.5 bg-crema-50" />
+    </div>
+    <div>
+      <label class="block font-semibold text-stone-600 mb-1">Categoría</label>
+      <select name="category" class="rounded-lg border border-crema-200 px-3 py-1.5 bg-crema-50">
+        <option value="">Todas (7 categorías)</option>
+        {% for c in categories %}
+        <option value="{{ c }}" {{ 'selected' if selected_cat == c else '' }}>{{ c }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label class="block font-semibold text-stone-600 mb-1">Clasificación</label>
+      <select name="classification" class="rounded-lg border border-crema-200 px-3 py-1.5 bg-crema-50">
+        <option value="">Todas</option>
+        <option value="Restringido" {{ 'selected' if selected_cls == 'Restringido' else '' }}>Restringido</option>
+        <option value="Interno" {{ 'selected' if selected_cls == 'Interno' else '' }}>Interno</option>
+        <option value="Público" {{ 'selected' if selected_cls == 'Público' else '' }}>Público</option>
+      </select>
+    </div>
+  </form>
+
+  <div class="flex gap-2 text-xs">
+    <a href="/activos/export.csv" class="px-3 py-2 rounded-lg border border-vino-800 text-vino-800 font-semibold hover:bg-vino-50">
+      Exportar CSV
+    </a>
+    {% if user.can_write %}
+    <button type="button" command="show-modal" commandfor="new-asset-dialog"
+      class="px-4 py-2 rounded-lg bg-vino-800 hover:bg-vino-700 text-white font-semibold">
+      + Registrar Activo
+    </button>
+    {% endif %}
+  </div>
+</div>
+
+<div id="assets-table-region">
+  {% include "partials/activos_table.html" %}
+</div>
+
+<dialog id="new-asset-dialog" aria-labelledby="new-asset-title" class="rounded-xl p-0 w-11/12 max-w-lg border border-crema-200 shadow-xl">
+  <div class="p-4 bg-vino-900 text-crema-50 flex items-center justify-between">
+    <h2 id="new-asset-title" class="font-bold text-sm text-oro-300">Registrar Nuevo Activo de Información</h2>
+    <button type="button" command="close" commandfor="new-asset-dialog" onclick="document.getElementById('new-asset-dialog').close()" class="text-xs px-2 py-1 rounded bg-vino-800">Cerrar</button>
+  </div>
+  <form action="/activos" method="post" class="p-5 space-y-3 text-xs bg-white">
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block font-semibold mb-1">Código</label>
+        <input name="code" required placeholder="ACT-21" autofocus class="w-full rounded border border-crema-200 px-2.5 py-1.5" />
+      </div>
+      <div>
+        <label class="block font-semibold mb-1">Categoría</label>
+        <select name="category" class="w-full rounded border border-crema-200 px-2.5 py-1.5">
+          <option>Hardware</option><option>Software</option><option>Información</option>
+          <option>Componentes de red</option><option>Servicios</option><option>Personas</option><option>Intangibles</option>
+        </select>
+      </div>
+    </div>
+    <div>
+      <label class="block font-semibold mb-1">Nombre del activo</label>
+      <input name="name" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" />
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block font-semibold mb-1">Proceso relacionado</label>
+        <input name="related_process" required value="Gestión de TI" class="w-full rounded border border-crema-200 px-2.5 py-1.5" />
+      </div>
+      <div>
+        <label class="block font-semibold mb-1">Propietario</label>
+        <input name="owner_role" required value="Responsable de TI" class="w-full rounded border border-crema-200 px-2.5 py-1.5" />
+      </div>
+    </div>
+    <div class="grid grid-cols-4 gap-2">
+      <div>
+        <label class="block font-semibold mb-1">Clasificación</label>
+        <select name="classification" class="w-full rounded border border-crema-200 px-2 py-1.5">
+          <option>Restringido</option><option>Interno</option><option>Público</option>
+        </select>
+      </div>
+      <div>
+        <label class="block font-semibold mb-1">Confid. (C)</label>
+        <select name="cid_c" class="w-full rounded border border-crema-200 px-2 py-1.5"><option>Alto</option><option>Medio</option><option>Bajo</option></select>
+      </div>
+      <div>
+        <label class="block font-semibold mb-1">Integ. (I)</label>
+        <select name="cid_i" class="w-full rounded border border-crema-200 px-2 py-1.5"><option>Alto</option><option>Medio</option><option>Bajo</option></select>
+      </div>
+      <div>
+        <label class="block font-semibold mb-1">Disp. (D)</label>
+        <select name="cid_d" class="w-full rounded border border-crema-200 px-2 py-1.5"><option>Alto</option><option>Medio</option><option>Bajo</option></select>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block font-semibold mb-1">Ubicación / Sucursal</label>
+        <input name="location" required value="Camino Real" class="w-full rounded border border-crema-200 px-2.5 py-1.5" />
+      </div>
+      <div>
+        <label class="block font-semibold mb-1">Protección requerida</label>
+        <input name="protection_level" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" />
+      </div>
+    </div>
+    <div class="flex justify-end gap-2 pt-2">
+      <button type="button" command="close" commandfor="new-asset-dialog" onclick="document.getElementById('new-asset-dialog').close()" class="px-3 py-1.5 rounded border border-crema-200">Cancelar</button>
+      <button type="submit" class="px-4 py-1.5 rounded bg-vino-800 text-white font-semibold">Guardar Activo</button>
+    </div>
+  </form>
+</dialog>
+{% endblock %}

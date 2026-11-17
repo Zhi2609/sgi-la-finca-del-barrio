@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% block title %}Operación SGI · {{ company.name }}{% endblock %}
+{% block page_heading %}Registros Operativos: Respaldos, Accesos, Capacitación y Proveedores{% endblock %}
+{% block content %}
+
+<div class="flex flex-wrap gap-2 mb-5 text-xs">
+  <a href="/operaciones?tab=respaldos" class="px-3.5 py-2 rounded-lg font-semibold border {{ 'bg-vino-800 text-white border-vino-800' if tab == 'respaldos' else 'bg-white border-crema-200' }}">
+    Respaldos (FR-TI-02)
+  </a>
+  <a href="/operaciones?tab=accesos" class="px-3.5 py-2 rounded-lg font-semibold border {{ 'bg-vino-800 text-white border-vino-800' if tab == 'accesos' else 'bg-white border-crema-200' }}">
+    Accesos y Bajas (FR-TI-03)
+  </a>
+  <a href="/operaciones?tab=capacitaciones" class="px-3.5 py-2 rounded-lg font-semibold border {{ 'bg-vino-800 text-white border-vino-800' if tab == 'capacitaciones' else 'bg-white border-crema-200' }}">
+    Capacitación (FR-SI-02)
+  </a>
+  <a href="/operaciones?tab=proveedores" class="px-3.5 py-2 rounded-lg font-semibold border {{ 'bg-vino-800 text-white border-vino-800' if tab == 'proveedores' else 'bg-white border-crema-200' }}">
+    Proveedores y SLA (FR-CA-01)
+  </a>
+</div>
+
+{% if tab == 'respaldos' %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 text-xs">
+  <section class="bg-white rounded-xl border border-crema-200 p-5 shadow-sm">
+    <h2 class="text-base font-bold text-vino-900 mb-3">Registrar Respaldo / Prueba (Control 8.13)</h2>
+    {% if user.can_write %}
+    <form action="/operaciones/respaldos" method="post" class="space-y-3">
+      <div><label class="block font-semibold mb-1">Fecha</label><input name="backup_date" type="date" value="2026-11-17" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      <div><label class="block font-semibold mb-1">Alcance</label><input name="scope" required placeholder="POS + CFDI + Inventario" class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      <div><label class="block font-semibold mb-1">Destino</label>
+        <select name="destination" class="w-full rounded border border-crema-200 px-2.5 py-1.5"><option>Nube cifrada</option><option>Disco externo sucursal</option></select>
+      </div>
+      <label class="flex items-center gap-2 font-semibold"><input type="checkbox" name="restore_tested" value="true" /> Se ejecutó prueba de restauración</label>
+      <div><label class="block font-semibold mb-1">Resultado prueba</label>
+        <select name="restore_result" class="w-full rounded border border-crema-200 px-2.5 py-1.5"><option>Exitosa</option><option>Con observaciones</option><option>No probada</option></select>
+      </div>
+      <div><label class="block font-semibold mb-1">Notas</label><input name="notes" class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      <button type="submit" class="w-full py-2 rounded-lg bg-vino-800 text-white font-semibold">Guardar en FR-TI-02</button>
+    </form>
+    {% endif %}
+  </section>
+  <section class="lg:col-span-2 bg-white rounded-xl border border-crema-200 shadow-sm overflow-hidden">
+    <div class="table-wrapper" tabindex="0" role="region" aria-label="Bitácora de respaldos">
+      <table class="sgi-table text-xs text-left">
+        <thead class="bg-vino-900 text-crema-50"><tr><th class="p-3">Fecha</th><th class="p-3">Alcance</th><th class="p-3">Destino</th><th class="p-3">Prueba</th><th class="p-3">Responsable</th></tr></thead>
+        <tbody class="divide-y divide-crema-100">
+          {% for b in backups %}
+          <tr>
+            <td class="p-3 font-mono">{{ b.backup_date }}</td>
+            <td class="p-3"><div class="font-semibold">{{ b.scope }}</div><div class="text-stone-500">{{ b.notes }}</div></td>
+            <td class="p-3">{{ b.destination }}</td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded-full font-semibold {{ 'bg-emerald-100 text-emerald-800' if b.restore_result == 'Exitosa' else 'bg-stone-100 text-stone-700' }}">{{ b.restore_result }}</span></td>
+            <td class="p-3">{{ b.responsible }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+{% elif tab == 'accesos' %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 text-xs">
+  <section class="bg-white rounded-xl border border-crema-200 p-5 shadow-sm">
+    <h2 class="text-base font-bold text-vino-900 mb-3">Control de Altas / Bajas (5.15, 5.18)</h2>
+    {% if user.can_write %}
+    <form action="/operaciones/accesos" method="post" class="space-y-3">
+      <div><label class="block font-semibold mb-1">Colaborador (Demo)</label><input name="employee_name" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      <div><label class="block font-semibold mb-1">Puesto / Área</label><input name="role_area" required placeholder="Caja / Mesero / Cocina" class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      <div><label class="block font-semibold mb-1">Sucursal</label>
+        <select name="branch" class="w-full rounded border border-crema-200 px-2.5 py-1.5"><option>Sucursal Camino Real</option><option>Sucursal Terraza San Fernando</option><option>La Finca del Toro</option></select>
+      </div>
+      <div><label class="block font-semibold mb-1">Sistema</label><input name="system_name" value="POS Comandas (ACT-02)" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      <div><label class="block font-semibold mb-1">Movimiento</label>
+        <select name="action_type" class="w-full rounded border border-crema-200 px-2.5 py-1.5"><option>Alta</option><option>Revisión periódica</option><option>Baja / Revocación</option></select>
+      </div>
+      <div><label class="block font-semibold mb-1">Fecha</label><input name="action_date" type="date" value="2026-11-17" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      <button type="submit" class="w-full py-2 rounded-lg bg-vino-800 text-white font-semibold">Registrar en FR-TI-03</button>
+    </form>
+    {% endif %}
+  </section>
+  <section class="lg:col-span-2 bg-white rounded-xl border border-crema-200 shadow-sm overflow-hidden">
+    <div class="table-wrapper" tabindex="0" role="region" aria-label="Control de accesos">
+      <table class="sgi-table text-xs text-left">
+        <thead class="bg-vino-900 text-crema-50"><tr><th class="p-3">Fecha</th><th class="p-3">Colaborador</th><th class="p-3">Sucursal / Sistema</th><th class="p-3">Movimiento</th><th class="p-3">Verificó</th></tr></thead>
+        <tbody class="divide-y divide-crema-100">
+          {% for ar in access_rows %}
+          <tr>
+            <td class="p-3 font-mono">{{ ar.action_date }}</td>
+            <td class="p-3"><div class="font-semibold">{{ ar.employee_name }}</div><div class="text-stone-500">{{ ar.role_area }}</div></td>
+            <td class="p-3"><div>{{ ar.system_name }}</div><div class="text-stone-500">{{ ar.branch }}</div></td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded-full font-semibold {{ 'bg-red-100 text-red-800' if 'Baja' in ar.action_type else 'bg-emerald-100 text-emerald-800' }}">{{ ar.action_type }}</span></td>
+            <td class="p-3">{{ ar.verified_by }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+{% elif tab == 'capacitaciones' %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 text-xs">
+  <section class="bg-white rounded-xl border border-crema-200 p-5 shadow-sm">
+    <h2 class="text-base font-bold text-vino-900 mb-3">Registrar Capacitación (Control 6.3)</h2>
+    {% if user.can_write %}
+    <form action="/operaciones/capacitaciones" method="post" class="space-y-3">
+      <div><label class="block font-semibold mb-1">Tema</label><input name="topic" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      <div><label class="block font-semibold mb-1">Norma</label><input name="norm_ref" value="ISO 27001 Control 6.3" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      <div><label class="block font-semibold mb-1">Fecha</label><input name="session_date" type="date" value="2026-11-17" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      <div class="grid grid-cols-2 gap-2">
+        <div><label class="block font-semibold mb-1">Asistentes</label><input name="attendees_count" type="number" value="20" required class="w-full rounded border border-crema-200 px-2 py-1.5" /></div>
+        <div><label class="block font-semibold mb-1">Meta</label><input name="target_count" type="number" value="20" required class="w-full rounded border border-crema-200 px-2 py-1.5" /></div>
+      </div>
+      <div><label class="block font-semibold mb-1">Sucursal</label><input name="branch" value="Ambas sucursales" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      <div><label class="block font-semibold mb-1">Evidencia</label><input name="evidence_note" class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      <button type="submit" class="w-full py-2 rounded-lg bg-vino-800 text-white font-semibold">Guardar en FR-SI-02</button>
+    </form>
+    {% endif %}
+  </section>
+  <section class="lg:col-span-2 bg-white rounded-xl border border-crema-200 shadow-sm overflow-hidden">
+    <div class="table-wrapper" tabindex="0" role="region" aria-label="Registro de capacitaciones">
+      <table class="sgi-table text-xs text-left">
+        <thead class="bg-vino-900 text-crema-50"><tr><th class="p-3">Fecha</th><th class="p-3">Tema y Norma</th><th class="p-3">Cobertura</th><th class="p-3">Sucursal</th><th class="p-3">Facilitador</th></tr></thead>
+        <tbody class="divide-y divide-crema-100">
+          {% for tr in trainings %}
+          <tr>
+            <td class="p-3 font-mono">{{ tr.session_date }}</td>
+            <td class="p-3"><div class="font-semibold">{{ tr.topic }}</div><div class="text-stone-500">{{ tr.norm_ref }} · {{ tr.evidence_note }}</div></td>
+            <td class="p-3 font-bold text-vino-800">{{ tr.attendees_count }}/{{ tr.target_count }}</td>
+            <td class="p-3">{{ tr.branch }}</td>
+            <td class="p-3">{{ tr.facilitator }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+{% else %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 text-xs">
+  <section class="bg-white rounded-xl border border-crema-200 p-5 shadow-sm">
+    <h2 class="text-base font-bold text-vino-900 mb-3">Evaluar Proveedor / SLA (Control 5.19)</h2>
+    {% if user.can_write %}
+    <form action="/operaciones/proveedores" method="post" class="space-y-3">
+      <div><label class="block font-semibold mb-1">Proveedor</label><input name="name" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      <div><label class="block font-semibold mb-1">Servicio / Insumo</label><input name="service_type" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      <div><label class="block font-semibold mb-1">Meta SLA</label><input name="sla_target" required value="99% · < 4 h" class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      <label class="flex items-center gap-2 font-semibold"><input type="checkbox" name="nda_signed" value="true" checked /> NDA / Confidencialidad firmada</label>
+      <div><label class="block font-semibold mb-1">Fecha evaluación</label><input name="last_eval_date" type="date" value="2026-11-17" required class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      <div><label class="block font-semibold mb-1">Estado</label>
+        <select name="compliance_status" class="w-full rounded border border-crema-200 px-2.5 py-1.5"><option>Cumple</option><option>Observación</option><option>Incumplimiento</option></select>
+      </div>
+      <div><label class="block font-semibold mb-1">Observaciones</label><input name="notes" class="w-full rounded border border-crema-200 px-2.5 py-1.5" /></div>
+      <button type="submit" class="w-full py-2 rounded-lg bg-vino-800 text-white font-semibold">Guardar en FR-CA-01</button>
+    </form>
+    {% endif %}
+  </section>
+  <section class="lg:col-span-2 bg-white rounded-xl border border-crema-200 shadow-sm overflow-hidden">
+    <div class="table-wrapper" tabindex="0" role="region" aria-label="Evaluación de proveedores">
+      <table class="sgi-table text-xs text-left">
+        <thead class="bg-vino-900 text-crema-50"><tr><th class="p-3">Proveedor</th><th class="p-3">SLA Comprometido</th><th class="p-3">NDA</th><th class="p-3">Estado</th><th class="p-3">Notas</th></tr></thead>
+        <tbody class="divide-y divide-crema-100">
+          {% for sp in suppliers %}
+          <tr>
+            <td class="p-3"><div class="font-bold">{{ sp.name }}</div><div class="text-stone-500">{{ sp.service_type }}</div></td>
+            <td class="p-3">{{ sp.sla_target }}</td>
+            <td class="p-3">{{ 'Sí' if sp.nda_signed else 'No' }}</td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded-full font-semibold {{ 'bg-emerald-100 text-emerald-800' if sp.compliance_status == 'Cumple' else 'bg-amber-100 text-amber-800' }}">{{ sp.compliance_status }}</span></td>
+            <td class="p-3 text-stone-600">{{ sp.notes }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+{% endif %}
+{% endblock %}

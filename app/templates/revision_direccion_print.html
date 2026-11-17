@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Acta Revisión por la Dirección · {{ company.name }}</title>
+  <link rel="stylesheet" href="/static/css/app.css" />
+</head>
+<body class="bg-stone-100 text-stone-900 p-4 md:p-8">
+  <div class="no-print max-w-4xl mx-auto mb-4 flex items-center justify-between bg-vino-900 text-crema-50 px-4 py-2.5 rounded-lg">
+    <a href="/auditoria" class="text-xs font-semibold text-oro-300 hover:underline">← Volver a Auditoría</a>
+    <button type="button" onclick="window.print()" class="px-4 py-1.5 rounded bg-oro-500 text-vino-950 text-xs font-bold">Imprimir / Guardar PDF Oficial</button>
+  </div>
+
+  <article class="max-w-4xl mx-auto bg-white border border-stone-300 p-8 text-xs space-y-5">
+    <header class="border-2 border-vino-900">
+      <div class="grid grid-cols-12 border-b-2 border-vino-900">
+        <div class="col-span-3 p-3 bg-vino-900 text-crema-50 text-center">
+          <p class="font-bold text-oro-300 uppercase">{{ company.name }}</p>
+          <p class="text-[10px]">{{ company.slogan }}</p>
+        </div>
+        <div class="col-span-6 p-3 border-x-2 border-vino-900">
+          <p class="text-[10px] font-bold text-vino-700 uppercase">Gobierno de TI · Cláusula 9.3</p>
+          <h1 class="text-base font-bold">Acta Unificada de Revisión por la Dirección del SGI</h1>
+          <p class="text-[11px] text-stone-600">ISO/IEC 27001:2022 · ISO 22000:2018 · ISO/IEC 38500:2024</p>
+        </div>
+        <div class="col-span-3 p-2 space-y-1 text-[11px]">
+          <div><strong>Código:</strong> LFB-ACT-RD-01</div>
+          <div><strong>Folio:</strong> LFB.9.3/GTI/015/2026</div>
+          <div><strong>Versión:</strong> v1.0</div>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <h2 class="font-bold text-vino-900 border-b border-crema-200 pb-1 mb-2">1. Desempeño de KPIs (Generado en tiempo real desde PostgreSQL)</h2>
+      <div class="grid grid-cols-4 gap-3">
+        <div class="p-2.5 border rounded bg-crema-50"><p class="text-stone-500">Disponibilidad POS</p><p class="text-base font-bold text-vino-800">{{ kpis.pos_availability }}</p></div>
+        <div class="p-2.5 border rounded bg-crema-50"><p class="text-stone-500">Cadena de Frío OK</p><p class="text-base font-bold text-emerald-700">{{ kpis.cold_pct }}%</p></div>
+        <div class="p-2.5 border rounded bg-crema-50"><p class="text-stone-500">DdA Implementada</p><p class="text-base font-bold text-vino-800">{{ kpis.dda_pct }}%</p></div>
+        <div class="p-2.5 border rounded bg-crema-50"><p class="text-stone-500">Pruebas Respaldo</p><p class="text-base font-bold text-emerald-700">{{ kpis.bkp_pct }}%</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="font-bold text-vino-900 border-b border-crema-200 pb-1 mb-2">2. Estado de Riesgos Críticos</h2>
+      <ul class="list-disc pl-5 space-y-1">
+        {% for hr in high_risks %}
+        <li><strong>#{{ hr.risk_num }} {{ hr.title }} (Nivel {{ hr.level }}):</strong> {{ hr.treatment_plan }} — Estado: <strong>{{ hr.treatment_status }}</strong>.</li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="font-bold text-vino-900 border-b border-crema-200 pb-1 mb-2">3. Resultados de Auditoría Interna</h2>
+      <ul class="list-disc pl-5 space-y-1">
+        {% for f in findings %}
+        <li><strong>{{ f.code }} ({{ f.finding_type }}):</strong> {{ f.description }} — <em>{{ f.status }}</em>.</li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section class="pt-6 border-t-2 border-vino-900 grid grid-cols-3 gap-6 text-center print-break-inside-avoid">
+      <div class="border p-3 rounded"><div class="h-8 border-b mb-1"></div><p class="font-bold">César García</p><p class="text-stone-500">CISO · Elaboró</p></div>
+      <div class="border p-3 rounded"><div class="h-8 border-b mb-1"></div><p class="font-bold">Ángel Guerrero</p><p class="text-stone-500">Owner · Revisó</p></div>
+      <div class="border p-3 rounded"><div class="h-8 border-b mb-1"></div><p class="font-bold">{{ company.owner_name }}</p><p class="text-stone-500">Dirección · Autorizó</p></div>
+    </section>
+  </article>
+</body>
+</html>

@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Cadena de Frío · {{ company.name }}{% endblock %}
+{% block page_heading %}Bitácora Tecnológica de Cadena de Frío (FR-CA-02 · ISO 22000 + ISO 27001 8.16){% endblock %}
+{% block content %}
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <!-- Form -->
+  <section class="bg-white rounded-xl border border-crema-200 p-5 shadow-sm text-xs">
+    <h2 class="text-base font-bold text-vino-900 mb-1">Registrar Lectura de Sensor</h2>
+    <p class="text-stone-500 mb-4">Cruce exacto de Inocuidad (ISO 22000) y Monitoreo TI (27001 Control 8.16). Si la lectura sale de rango, se genera alerta y ticket crítico automático.</p>
+
+    {% if user.can_write %}
+    <form action="/cadena-frio" method="post" class="space-y-3">
+      <div>
+        <label class="block font-semibold mb-1">Sucursal / Evento</label>
+        <select name="branch" class="w-full rounded border border-crema-200 px-2.5 py-1.5 bg-crema-50">
+          <option>Sucursal Camino Real</option>
+          <option>Sucursal Terraza San Fernando</option>
+          <option>La Finca del Toro</option>
+          <option>Evento Feria Colima</option>
+        </select>
+      </div>
+      <div>
+        <label class="block font-semibold mb-1">Equipo / Cámara</label>
+        <select name="unit_name" class="w-full rounded border border-crema-200 px-2.5 py-1.5 bg-crema-50">
+          <option>Cámara de Cortes Finos #1</option>
+          <option>Cámara de Cortes #2</option>
+          <option>Congelador Principal</option>
+          <option>Contenedor Térmico Móvil A</option>
+        </select>
+      </div>
+      <div class="grid grid-cols-3 gap-2">
+        <div>
+          <label class="block font-semibold mb-1">Temp (°C)</label>
+          <input name="temp_c" type="number" step="0.1" value="2.2" required class="w-full rounded border border-crema-200 px-2 py-1.5" />
+        </div>
+        <div>
+          <label class="block font-semibold mb-1">Mín (°C)</label>
+          <input name="min_c" type="number" step="0.1" value="-2.0" required class="w-full rounded border border-crema-200 px-2 py-1.5" />
+        </div>
+        <div>
+          <label class="block font-semibold mb-1">Máx (°C)</label>
+          <input name="max_c" type="number" step="0.1" value="4.0" required class="w-full rounded border border-crema-200 px-2 py-1.5" />
+        </div>
+      </div>
+      <div>
+        <label class="block font-semibold mb-1">Observación / Acción correctiva</label>
+        <textarea name="corrective_action" rows="2" placeholder="Opcional si está en rango; obligatorio si supera el límite." class="w-full rounded border border-crema-200 px-2.5 py-1.5"></textarea>
+      </div>
+      <button type="submit" class="w-full py-2 rounded-lg bg-vino-800 hover:bg-vino-700 text-white font-semibold">
+        Guardar Lectura (FR-CA-02)
+      </button>
+    </form>
+    {% else %}
+    <p class="p-3 rounded bg-amber-50 border border-amber-200 text-amber-900">Solo lectura en modo Auditor.</p>
+    {% endif %}
+  </section>
+
+  <!-- Table -->
+  <section class="lg:col-span-2 bg-white rounded-xl border border-crema-200 shadow-sm overflow-hidden">
+    <div class="table-wrapper" tabindex="0" role="region" aria-labelledby="cold-cap">
+      <table class="sgi-table text-xs text-left">
+        <caption id="cold-cap" class="sr-only">Bitácora de temperaturas y alertas de cadena de frío</caption>
+        <thead class="bg-vino-900 text-crema-50">
+          <tr>
+            <th class="p-3">Fecha/Hora</th>
+            <th class="p-3">Sucursal y Equipo</th>
+            <th class="p-3">Lectura</th>
+            <th class="p-3">Rango</th>
+            <th class="p-3">Estado</th>
+            <th class="p-3">Acción / Responsable</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-crema-100">
+          {% for c in logs %}
+          <tr class="{{ 'bg-red-50/70' if not c.in_range else 'hover:bg-crema-50/60' }}">
+            <td class="p-3 text-stone-500 whitespace-nowrap">{{ c.recorded_at.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td class="p-3">
+              <div class="font-bold text-stone-900">{{ c.unit_name }}</div>
+              <div class="text-[11px] text-stone-500">{{ c.branch }}</div>
+            </td>
+            <td class="p-3 font-mono font-bold text-sm {{ 'text-emerald-800' if c.in_range else 'text-red-700' }}">{{ c.temp_c }} °C</td>
+            <td class="p-3 font-mono text-[11px] text-stone-600">{{ c.min_c }} a {{ c.max_c }} °C</td>
+            <td class="p-3">
+              <span class="px-2 py-0.5 rounded-full font-bold {{ 'bg-emerald-100 text-emerald-800' if c.in_range else 'bg-red-100 text-red-800' }}">
+                {{ 'En rango' if c.in_range else 'ALERTA' }}
+              </span>
+            </td>
+            <td class="p-3">
+              <div class="text-stone-700">{{ c.corrective_action }}</div>
+              <div class="text-[11px] text-stone-400">Por: {{ c.recorded_by }}</div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+{% endblock %}

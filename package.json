@@ -1,0 +1,16 @@
+{
+  "name": "sgi-la-finca-del-barrio",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Sistema de Gestión Integral (ISO 27001, ISO 22000, ISO 38500, ITIL 4) - La Finca del Barrio",
+  "scripts": {
+    "build:css": "tailwindcss -i ./app/static/css/input.css -o ./app/static/css/app.css --minify",
+    "watch:css": "tailwindcss -i ./app/static/css/input.css -o ./app/static/css/app.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  },
+  "dependencies": {
+    "htmx.org": "^2.0.4"
+  }
+}

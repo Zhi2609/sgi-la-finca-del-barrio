@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block title %}DdA 93 Controles y Trazabilidad · {{ company.name }}{% endblock %}
+{% block page_heading %}Declaración de Aplicabilidad (DdA_27001), Trazabilidad y RACI{% endblock %}
+{% block content %}
+
+<!-- Summary Cards -->
+<div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-5 text-xs">
+  <div class="bg-white rounded-xl border border-crema-200 p-3 shadow-sm">
+    <p class="text-stone-500">Total Anexo A</p>
+    <p class="text-xl font-bold text-vino-900">{{ summary.total }}</p>
+  </div>
+  <div class="bg-white rounded-xl border border-crema-200 p-3 shadow-sm">
+    <p class="text-stone-500">Aplica</p>
+    <p class="text-xl font-bold text-emerald-700">{{ summary.aplica }}</p>
+  </div>
+  <div class="bg-white rounded-xl border border-crema-200 p-3 shadow-sm">
+    <p class="text-stone-500">Aplica parcialmente</p>
+    <p class="text-xl font-bold text-amber-700">{{ summary.parcial }}</p>
+  </div>
+  <div class="bg-white rounded-xl border border-crema-200 p-3 shadow-sm">
+    <p class="text-stone-500">No aplica (justificado)</p>
+    <p class="text-xl font-bold text-stone-600">{{ summary.no_aplica }}</p>
+  </div>
+  <div class="bg-white rounded-xl border border-crema-200 p-3 shadow-sm">
+    <p class="text-stone-500">Implementados</p>
+    <p class="text-xl font-bold text-vino-800">{{ summary.impl }}</p>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="flex flex-wrap gap-2 mb-4 text-xs">
+  <a href="/dda?tab=dda" class="px-3.5 py-2 rounded-lg font-semibold border {{ 'bg-vino-800 text-white border-vino-800' if tab == 'dda' else 'bg-white border-crema-200 text-stone-700' }}">
+    Declaración de Aplicabilidad (93 Controles)
+  </a>
+  <a href="/dda?tab=trazabilidad" class="px-3.5 py-2 rounded-lg font-semibold border {{ 'bg-vino-800 text-white border-vino-800' if tab == 'trazabilidad' else 'bg-white border-crema-200 text-stone-700' }}">
+    Matriz de Trazabilidad Integrada
+  </a>
+  <a href="/dda?tab=raci" class="px-3.5 py-2 rounded-lg font-semibold border {{ 'bg-vino-800 text-white border-vino-800' if tab == 'raci' else 'bg-white border-crema-200 text-stone-700' }}">
+    Roles, Responsabilidades y RACI
+  </a>
+</div>
+
+{% if tab == 'dda' %}
+<div class="bg-white rounded-xl border border-crema-200 p-4 shadow-sm mb-4">
+  <form hx-get="/dda" hx-target="#dda-table-region" hx-trigger="change" class="flex flex-wrap gap-3 text-xs items-end">
+    <input type="hidden" name="tab" value="dda" />
+    <div>
+      <label class="block font-semibold text-stone-600 mb-1">Dominio ISO/IEC 27001:2022</label>
+      <select name="domain" class="rounded-lg border border-crema-200 px-3 py-1.5 bg-crema-50">
+        <option value="">Todos los dominios</option>
+        <option value="Organizacional" {{ 'selected' if selected_domain == 'Organizacional' else '' }}>5.x Organizacional (37)</option>
+        <option value="Personas" {{ 'selected' if selected_domain == 'Personas' else '' }}>6.x Personas (8)</option>
+        <option value="Físico" {{ 'selected' if selected_domain == 'Físico' else '' }}>7.x Físico (14)</option>
+        <option value="Tecnológico" {{ 'selected' if selected_domain == 'Tecnológico' else '' }}>8.x Tecnológico (34)</option>
+      </select>
+    </div>
+    <div>
+      <label class="block font-semibold text-stone-600 mb-1">Decisión de Aplicabilidad</label>
+      <select name="decision" class="rounded-lg border border-crema-200 px-3 py-1.5 bg-crema-50">
+        <option value="">Todas</option>
+        <option value="Aplica" {{ 'selected' if selected_decision == 'Aplica' else '' }}>Aplica</option>
+        <option value="Aplica parcialmente" {{ 'selected' if selected_decision == 'Aplica parcialmente' else '' }}>Aplica parcialmente</option>
+        <option value="No aplica" {{ 'selected' if selected_decision == 'No aplica' else '' }}>No aplica</option>
+      </select>
+    </div>
+  </form>
+</div>
+<div id="dda-table-region">
+  {% include "partials/dda_table.html" %}
+</div>
+
+{% elif tab == 'trazabilidad' %}
+<div class="bg-white rounded-xl border border-crema-200 shadow-sm overflow-hidden">
+  <div class="table-wrapper" tabindex="0" role="region" aria-labelledby="trace-cap">
+    <table class="sgi-table text-xs text-left">
+      <caption id="trace-cap" class="sr-only">Trazabilidad requisito a riesgo, control, COBIT, procedimiento, formato y KPI</caption>
+      <thead class="bg-vino-900 text-crema-50">
+        <tr>
+          <th class="p-3">#</th>
+          <th class="p-3">Requisito de Origen</th>
+          <th class="p-3">Riesgo</th>
+          <th class="p-3">Controles</th>
+          <th class="p-3">COBIT 2019</th>
+          <th class="p-3">Procedimiento</th>
+          <th class="p-3">Formato / Evidencia</th>
+          <th class="p-3">KPI</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-crema-100">
+        {% for t in trace %}
+        <tr class="hover:bg-crema-50/60">
+          <th class="p-3 font-bold text-vino-800">#{{ t.risk_id }}</th>
+          <td class="p-3 text-stone-600">{{ t.origin_req }}</td>
+          <td class="p-3 font-semibold text-stone-900">{{ t.risk_title }}</td>
+          <td class="p-3 font-mono text-[11px]">{{ t.controls }}</td>
+          <td class="p-3 font-mono text-vino-800 font-bold">{{ t.cobit_ref }}</td>
+          <td class="p-3">{{ t.procedure_code }}</td>
+          <td class="p-3 font-semibold">{{ t.record_code }}</td>
+          <td class="p-3 text-emerald-800 font-medium">{{ t.kpi_target }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% else %}
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs">
+  <div class="bg-white rounded-xl border border-crema-200 p-5 shadow-sm">
+    <h2 class="text-base font-bold text-vino-900 mb-3">Estructura del Equipo Consultor (Innova Tec TI)</h2>
+    <ul class="divide-y divide-crema-100">
+      {% for eng in team_engineers %}
+      <li class="py-2.5 flex justify-between items-center">
+        <div>
+          <p class="font-bold text-stone-900">{{ eng.name }}</p>
+          <p class="text-stone-500">{{ eng.email }}</p>
+        </div>
+        <span class="px-2.5 py-1 rounded-full bg-vino-50 text-vino-800 font-semibold">{{ eng.role }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="bg-white rounded-xl border border-crema-200 p-5 shadow-sm">
+    <h2 class="text-base font-bold text-vino-900 mb-3">Matriz RACI · Atención Falla Crítica POS (LFB-CP-02)</h2>
+    <div class="table-wrapper" tabindex="0" role="region" aria-label="Matriz RACI">
+      <table class="sgi-table text-[11px] text-left">
+        <thead class="bg-vino-900 text-crema-50">
+          <tr>
+            <th class="p-2">Actividad</th>
+            <th class="p-2">Sucursal</th>
+            <th class="p-2">Gerente</th>
+            <th class="p-2">TI</th>
+            <th class="p-2">Prov.</th>
+            <th class="p-2">Dueño</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-crema-100">
+          <tr><td class="p-2">1. Reportar falla al detectarla</td><td class="p-2 font-bold">R</td><td class="p-2 font-bold">A</td><td class="p-2">I</td><td class="p-2">-</td><td class="p-2">-</td></tr>
+          <tr><td class="p-2">2. Registrar ticket y clasificar</td><td class="p-2">C</td><td class="p-2">I</td><td class="p-2 font-bold">A/R</td><td class="p-2">-</td><td class="p-2">-</td></tr>
+          <tr><td class="p-2">3. Operar en modo offline / respaldo</td><td class="p-2 font-bold">R</td><td class="p-2 font-bold">A</td><td class="p-2">C</td><td class="p-2">-</td><td class="p-2">I</td></tr>
+          <tr><td class="p-2">4. Diagnosticar y resolver (&lt; 2 h)</td><td class="p-2">I</td><td class="p-2">I</td><td class="p-2 font-bold">A/R</td><td class="p-2">C</td><td class="p-2">I</td></tr>
+          <tr><td class="p-2">5. Escalar al proveedor según SLA</td><td class="p-2">-</td><td class="p-2">I</td><td class="p-2 font-bold">R</td><td class="p-2 font-bold">A</td><td class="p-2">I</td></tr>
+          <tr><td class="p-2">6. Informar KPIs a Dirección</td><td class="p-2">-</td><td class="p-2">C</td><td class="p-2 font-bold">R</td><td class="p-2">-</td><td class="p-2 font-bold">A</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
